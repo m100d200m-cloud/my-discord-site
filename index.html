@@ -5,7 +5,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>RUSSIA | مركز الخدمات</title>
-
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <style>
@@ -162,9 +161,7 @@
 
       <h1>مرحباً بك في <span>مركز الخدمات</span></h1>
 
-      <p>
-        سجّل دخولك بحساب Discord للتحقق من عضويتك ورتبتك.
-      </p>
+      <p>سجّل دخولك بحساب Discord للتحقق من عضويتك ورتبتك.</p>
 
       <button id="mainLoginBtn" class="primary">
         الدخول عبر Discord
@@ -187,7 +184,7 @@
       <div class="cards">
         <div class="card">
           <h3>🎫 التذاكر</h3>
-          <p>تم السماح لك بالدخول. واجهة التذاكر الفعلية تحتاج إلى ربط منفصل.</p>
+          <p>تم السماح لك بالدخول. واجهة التذاكر تحتاج إلى ربط منفصل.</p>
         </div>
 
         <div class="card">
@@ -206,11 +203,9 @@
   <footer>RUSSIA SERVICES</footer>
 
   <script>
-    // إعدادات مشروعك
     const SUPABASE_URL =
       "https://hivbjjtdxezftpewovhy.supabase.co";
 
-    // ضع مفتاح Supabase العام هنا فقط
     const SUPABASE_PUBLISHABLE_KEY =
       "sb_publishable_yalLdE_KrroBxB-XaiI1aA_9__jfaKb";
 
@@ -238,16 +233,6 @@
       logoutBtn.classList.toggle("hidden", !loggedIn);
     }
 
-    if (
-      !window.supabase ||
-      !SUPABASE_PUBLISHABLE_KEY ||
-      SUPABASE_PUBLISHABLE_KEY === "1558493155316473947"
-    ) {
-      setStatus("خطأ: ضع مفتاح Supabase العام في الكود أولاً.");
-      throw new Error("Supabase public key is missing");
-    }
-
-    // إعداد حفظ الجلسة ومعالجة رابط الرجوع من Discord
     const supabaseClient = window.supabase.createClient(
       SUPABASE_URL,
       SUPABASE_PUBLISHABLE_KEY,
@@ -302,7 +287,10 @@
       verifiedUserId = null;
       memberArea.classList.add("hidden");
       profileEl.classList.add("hidden");
+      staffCard.classList.add("hidden");
       setLoggedIn(false);
+      loginBtn.disabled = false;
+      mainLoginBtn.disabled = false;
       setStatus("تم تسجيل الخروج بنجاح.");
     }
 
@@ -319,57 +307,79 @@
       setStatus("تم تسجيل الدخول. جارٍ التحقق من رتبتك...");
 
       try {
+        // إرسال رمز جلسة المستخدم إلى bright-api
+        const {
+          data: { session },
+          error: sessionError
+        } = await supabaseClient.auth.getSession();
+
+        if (sessionError) throw sessionError;
+
+        if (!session?.access_token) {
+          throw new Error("انتهت جلسة الدخول. سجّل دخولك مرة أخرى.");
+        }
+
         const { data, error } =
           await supabaseClient.functions.invoke("bright-api", {
-            body: {}
+            body: {},
+            headers: {
+              Authorization: "Bearer " + session.access_token
+            }
           });
 
         if (error) {
-          console.error("site-api error:", error);
+          console.error("bright-api request error:", error, error.context);
 
-          let extra = "";
+          let details = "";
 
-          if (error.context) {
-            try {
-              const response = error.context;
-              if (typeof response.json === "function") {
-                const details = await response.json();
-                extra = details.error
-                  ? "\n" + details.error
-                  : "";
-              }
-            } catch (_) {}
-          }
+          try {
+            if (error.context && typeof error.context.json === "function") {
+              const responseData = await error.context.json();
+              details = responseData.error || "";
+            }
+          } catch (_) {}
 
           setStatus(
-            "تم تسجيل الدخول، لكن فشل التحقق من الرتبة." +
-            extra +
-            "\nافتح Console إذا استمر الخطأ."
+            "فشل التحقق من الرتبة." +
+            (details ? "\nالسبب: " + details : "") +
+            "\nافتح Console لمعرفة التفاصيل."
           );
           return;
         }
 
-        if (!data || data.success !== true) {
-          setStatus("لم تكتمل عملية التحقق من الحساب.");
+        console.log("bright-api response:", data);
+
+        // bright-api يرجع allowed وليس success أو hasAccess
+        if (!data || typeof data.allowed !== "boolean") {
+          setStatus(
+            "استجابة bright-api غير متوقعة.\n" +
+            "افتح Console وانسخ نتيجة bright-api."
+          );
           return;
         }
 
-        if (!data.hasAccess) {
+        const discordId = data.discordUserId || "غير متوفر";
+
+        if (!data.allowed) {
           verifiedUserId = user.id;
+
           setStatus(
-            "تم تسجيل الدخول بنجاح، لكن حسابك لا يحمل رتبة الدخول المطلوبة."
+            data.error === "Not a member of the Discord server"
+              ? "حسابك ليس عضوًا في سيرفر Discord المطلوب."
+              : "تم تسجيل الدخول، لكن حسابك لا يملك رتبة الدخول المطلوبة."
           );
-          profileEl.textContent =
-            "Discord ID: " + (data.discordId || "غير متوفر");
+
+          profileEl.textContent = "Discord ID: " + discordId;
           profileEl.classList.remove("hidden");
           return;
         }
 
         verifiedUserId = user.id;
+
         setStatus("تم تسجيل الدخول والتحقق من رتبتك بنجاح!");
 
         profileEl.textContent =
-          "Discord ID: " + data.discordId +
+          "Discord ID: " + discordId +
           (data.isStaff ? "\nرتبة المسؤولين: تم التحقق" : "");
 
         profileEl.classList.remove("hidden");
@@ -378,11 +388,10 @@
         if (data.isStaff) {
           staffCard.classList.remove("hidden");
         }
+
       } catch (error) {
         console.error("Verification error:", error);
-        setStatus(
-          "حدث خطأ أثناء التحقق. افتح Console لمعرفة التفاصيل."
-        );
+        setStatus("حدث خطأ أثناء التحقق:\n" + error.message);
       } finally {
         verificationInProgress = false;
       }
@@ -392,7 +401,6 @@
       setStatus("جارٍ فحص جلسة تسجيل الدخول...");
 
       try {
-        // انتظر انتهاء معالجة رابط الرجوع من OAuth
         const {
           data: { session },
           error
@@ -400,7 +408,7 @@
 
         if (error) throw error;
 
-        if (session && session.user) {
+        if (session?.user) {
           await verifyAccess(session.user);
         } else {
           setLoggedIn(false);
@@ -410,42 +418,34 @@
         }
       } catch (error) {
         console.error("Session error:", error);
-        setStatus(
-          "تعذر استعادة جلسة الدخول: " + error.message
-        );
+        setStatus("تعذر استعادة جلسة الدخول: " + error.message);
       }
 
-      supabaseClient.auth.onAuthStateChange(
-        (event, session) => {
-          if (event === "SIGNED_OUT") {
-            verifiedUserId = null;
-            setLoggedIn(false);
-            memberArea.classList.add("hidden");
-            profileEl.classList.add("hidden");
-            setStatus("تم تسجيل الخروج.");
-            return;
-          }
-
-          if (event === "SIGNED_IN" && session?.user) {
-            verifiedUserId = null;
-
-            // تجنب استدعاء وظائف المصادقة مباشرة داخل الحدث
-            Promise.resolve().then(() => {
-              verifyAccess(session.user);
-            });
-          }
+      supabaseClient.auth.onAuthStateChange((event, session) => {
+        if (event === "SIGNED_OUT") {
+          verifiedUserId = null;
+          setLoggedIn(false);
+          memberArea.classList.add("hidden");
+          profileEl.classList.add("hidden");
+          staffCard.classList.add("hidden");
+          setStatus("تم تسجيل الخروج.");
+          return;
         }
-      );
+
+        if (event === "SIGNED_IN" && session?.user) {
+          verifiedUserId = null;
+          Promise.resolve().then(() => verifyAccess(session.user));
+        }
+      });
     }
 
     loginBtn.addEventListener("click", loginDiscord);
     mainLoginBtn.addEventListener("click", loginDiscord);
     logoutBtn.addEventListener("click", logout);
 
-    document.getElementById("serverBtn").addEventListener(
-      "click",
-      () => window.open(DISCORD_SERVER_URL, "_blank", "noopener")
-    );
+    document.getElementById("serverBtn").addEventListener("click", () => {
+      window.open(DISCORD_SERVER_URL, "_blank", "noopener");
+    });
 
     initializeSite();
   </script>
