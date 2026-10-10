@@ -1,96 +1,78 @@
-
+```html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>مركز الخدمات | Discord</title>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #0b0d13;
-      color: white;
-    }
-    header {
-      padding: 22px;
-      text-align: center;
-      background: #111522;
-      border-bottom: 1px solid #252b40;
-    }
-    header h1 { color: #6685ff; margin: 0 0 10px; }
-    header p { color: #b5bdd3; }
-    .hero {
-      text-align: center;
-      padding: 65px 20px 35px;
-    }
-    .hero h2 { font-size: 32px; }
-    .hero p { color: #aeb6cb; line-height: 1.9; }
-    .button {
-      display: inline-block;
-      background: #5865f2;
-      color: white;
-      text-decoration: none;
-      padding: 13px 22px;
-      border-radius: 9px;
-      margin-top: 12px;
-    }
-    .services {
-      max-width: 950px;
-      margin: auto;
-      padding: 20px;
-      display: grid;
-      grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
-      gap: 18px;
-    }
-    .card {
-      background: #141824;
-      border: 1px solid #282f44;
-      padding: 25px;
-      border-radius: 15px;
-      text-align: center;
-    }
-    .card h3 { color: #8196ff; }
-    .card p { color: #b5bdd0; line-height: 1.8; }
-    footer {
-      text-align: center;
-      color: #858da3;
-      padding: 30px 15px;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مركز الخدمات | روسيا</title>
+<style>
+*{box-sizing:border-box}
+:root{--red:#e51b2b;--dark:#09090d;--panel:#171116;--border:#462027}
+body{margin:0;font-family:Arial,sans-serif;background:var(--dark);color:#fff}
+header{padding:18px 20px;text-align:center;background:#14090c;border-bottom:1px solid var(--border)}
+header h1{color:#ff3344;margin:0 0 8px}
+header p{color:#d6bfc3;margin:0}
+.flag{width:100%;height:190px;position:relative;overflow:hidden;box-shadow:0 8px 35px #000}
+.flag div{height:33.333%;width:100%}
+.white{background:#fff}.blue{background:#1746a2}.red{background:#d52b1e}
+.flag:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#0005,transparent 40%,#0005);pointer-events:none}
+.hero{text-align:center;padding:55px 20px 40px;background:radial-gradient(ellipse at top,#501018 0%,#18090d 50%,#09090d 100%)}
+.hero h2{font-size:clamp(27px,5vw,42px);margin:0 0 16px;text-shadow:0 0 25px #e51b2b66}
+.hero p{color:#d0b8bd;line-height:2;max-width:650px;margin:auto}
+.button{display:inline-block;background:var(--red);color:white;text-decoration:none;padding:14px 25px;border-radius:8px;margin:18px 7px 0;font-weight:bold;border:1px solid #ff6571;transition:.2s}
+.button:hover{background:#b60f20;transform:translateY(-2px)}
+.button.secondary{background:#211116;border-color:#642630}
+.section-title{text-align:center;color:#ff4656;margin:25px 0 8px}
+.services{max-width:1000px;margin:auto;padding:25px 20px 55px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+.card{background:linear-gradient(145deg,#1c1116,#100c10);border:1px solid var(--border);padding:26px 22px;border-radius:13px;text-align:center;transition:.2s}
+.card:hover{border-color:var(--red);transform:translateY(-4px);box-shadow:0 8px 30px #e51b2b12}
+.card h3{color:#ff4656;font-size:21px}
+.card p{color:#c9b7bc;line-height:1.9}
+.status{display:inline-block;background:#341018;color:#ff7d89;padding:7px 13px;border-radius:20px;font-size:13px;margin-top:10px}
+footer{text-align:center;color:#a48d93;padding:25px 15px;border-top:1px solid var(--border);background:#10090c}
+</style>
 </head>
 <body>
-  <header>
-    <h1>مركز الخدمات</h1>
-    <p>كل خدمات سيرفرك في مكان واحد</p>
-  </header>
+<header>
+  <h1>مركز الخدمات</h1>
+  <p>بوابتك الرسمية للخدمات والمجتمع</p>
+</header>
 
-  <section class="hero">
-    <h2>حياك الله في موقعنا</h2>
-    <p>اكتشف الخدمات، تعرّف على الرتب، وتواصل مع فريق الإدارة.</p>
-    <a class="button" href="https://discord.com/" target="_blank" rel="noopener">
-      دخول ديسكورد
-    </a>
-  </section>
+<div class="flag" aria-label="علم روسيا">
+  <div class="white"></div>
+  <div class="blue"></div>
+  <div class="red"></div>
+</div>
 
-  <section class="services">
-    <div class="card">
-      <h3>🎖️ الرتب</h3>
-      <p>تعرّف على الرتب المتاحة في السيرفر.</p>
-    </div>
-    <div class="card">
-      <h3>🎫 التذاكر</h3>
-      <p>تواصل مع فريق الدعم للحصول على المساعدة.</p>
-    </div>
-    <div class="card">
-      <h3>🛒 الخدمات</h3>
-      <p>اكتشف الخدمات والمنتجات المتوفرة.</p>
-    </div>
-  </section>
+<section class="hero">
+  <h2>مرحباً بك في مركز الخدمات</h2>
+  <p>اجمع خدمات مجتمعك في مكان واحد، وتواصل مع فريق الإدارة، وتابع طلباتك وتذاكرك من خلال واجهة مستوحاة من الألوان الروسية.</p>
+  <a class="button" href="https://discord.com/oauth2/authorize?client_id=ضع_CLIENT_ID_هنا&scope=identify" target="_blank" rel="noopener">تسجيل الدخول عبر Discord</a>
+  <a class="button secondary" href="https://discord.com/" target="_blank" rel="noopener">دخول ديسكورد</a>
+  <div><span class="status">● مركز الخدمات</span></div>
+</section>
 
-  <footer>
-    جميع الحقوق محفوظة © مركز الخدمات
-  </footer>
+<h2 class="section-title">خدمات الموقع</h2>
+<section class="services">
+  <div class="card">
+    <h3>🎖️ الرتب</h3>
+    <p>عرض الرتب والصلاحيات المتاحة لأعضاء المجتمع.</p>
+  </div>
+  <div class="card">
+    <h3>🎫 التذاكر</h3>
+    <p>واجهة مخصصة لطلبات الدعم والتواصل مع الإدارة.</p>
+  </div>
+  <div class="card">
+    <h3>💬 الغرف والمحادثات</h3>
+    <p>مكان منظم للغرف والرسائل بين أعضاء الموقع.</p>
+  </div>
+  <div class="card">
+    <h3>📋 سجل العمليات</h3>
+    <p>قسم مخصص لمتابعة العمليات الإدارية بعد ربط الصلاحيات.</p>
+  </div>
+</section>
+
+<footer>جميع الحقوق محفوظة © مركز الخدمات</footer>
 </body>
 </html>
+```
