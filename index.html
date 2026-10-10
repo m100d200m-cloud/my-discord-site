@@ -15,339 +15,475 @@
 
     body {
       margin: 0;
-      font-family: Arial, sans-serif;
+      min-height: 100vh;
+      font-family: Tahoma, Arial, sans-serif;
       color: #fff;
       background:
-        linear-gradient(rgba(12, 5, 8, .92), rgba(12, 5, 8, .97)),
-        linear-gradient(to bottom, #fff 0 33.33%, #174a9c 33.33% 66.66%, #d71920 66.66%);
-      min-height: 100vh;
+        linear-gradient(rgba(8, 8, 12, .88), rgba(8, 8, 12, .96)),
+        linear-gradient(180deg, #fff 0 33.3%, #164a9a 33.3% 66.6%, #d51d35 66.6%);
+      background-attachment: fixed;
     }
 
     header {
-      padding: 18px 7%;
-      background: rgba(10, 8, 10, .94);
-      border-bottom: 2px solid #d71920;
+      padding: 22px 6%;
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
       gap: 15px;
       flex-wrap: wrap;
+      border-bottom: 1px solid #292929;
+      background: rgba(10, 10, 12, .9);
     }
 
-    .brand {
-      font-size: 24px;
+    .logo {
+      font-size: 25px;
       font-weight: bold;
-      color: #ff3038;
+      color: #f04444;
     }
 
-    .flag {
-      display: inline-flex;
-      flex-direction: column;
-      width: 34px;
-      height: 22px;
-      vertical-align: middle;
-      margin-left: 8px;
-      overflow: hidden;
-      border-radius: 3px;
+    .logo span {
+      color: #fff;
     }
 
-    .flag span {
-      flex: 1;
-    }
-
-    .flag span:nth-child(1) { background: white; }
-    .flag span:nth-child(2) { background: #174a9c; }
-    .flag span:nth-child(3) { background: #d71920; }
-
-    .login-btn, .logout-btn {
+    button {
       border: 0;
-      border-radius: 9px;
-      padding: 12px 18px;
-      background: #d71920;
-      color: white;
+      border-radius: 10px;
+      padding: 13px 20px;
       font-size: 15px;
       font-weight: bold;
       cursor: pointer;
+      transition: .2s;
     }
 
-    .login-btn:hover, .logout-btn:hover {
-      background: #a80e17;
+    button:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.12);
+    }
+
+    .primary {
+      background: #d92336;
+      color: white;
+    }
+
+    .secondary {
+      background: #24242a;
+      color: white;
+      border: 1px solid #414149;
     }
 
     main {
-      width: min(1050px, 92%);
+      width: min(1000px, 92%);
       margin: 45px auto;
     }
 
     .hero {
       text-align: center;
-      padding: 40px 20px;
-      background: linear-gradient(135deg, #260c12, #111116);
-      border: 1px solid #61212a;
-      border-radius: 18px;
-      box-shadow: 0 12px 35px #0008;
+      padding: 45px 20px;
+      border: 1px solid #34343b;
+      border-radius: 22px;
+      background: rgba(14, 14, 18, .94);
+      box-shadow: 0 15px 55px rgba(0, 0, 0, .3);
     }
 
-    .hero h1 {
-      font-size: clamp(28px, 5vw, 44px);
+    .flag {
+      width: 120px;
+      height: 72px;
+      margin: 0 auto 25px;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 5px 20px #0008;
+    }
+
+    .flag div {
+      height: 33.333%;
+    }
+
+    .white {
+      background: white;
+    }
+
+    .blue {
+      background: #17469b;
+    }
+
+    .red {
+      background: #d51d35;
+    }
+
+    h1 {
+      font-size: clamp(27px, 5vw, 43px);
       margin: 0 0 15px;
     }
 
-    .hero h1 strong {
-      color: #ff3038;
+    h1 span {
+      color: #ed3447;
     }
 
-    .hero p {
-      color: #d5c7c9;
-      line-height: 1.9;
+    .description {
+      max-width: 650px;
+      margin: auto;
+      color: #c2c2ca;
+      line-height: 2;
     }
 
-    .profile {
-      margin: 22px auto 0;
-      padding: 12px;
+    .actions {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 25px;
+    }
+
+    .panel {
+      margin-top: 22px;
+      padding: 22px;
+      border: 1px solid #34343b;
+      border-radius: 16px;
+      background: rgba(14, 14, 18, .96);
+    }
+
+    .panel h2 {
+      margin-top: 0;
+      font-size: 21px;
+    }
+
+    .status {
+      padding: 13px;
+      margin-top: 15px;
       border-radius: 10px;
-      background: #ffffff0b;
-      display: none;
-      max-width: 480px;
+      background: #202026;
+      color: #e5e5e9;
+      line-height: 1.9;
       overflow-wrap: anywhere;
-    }
-
-    .section-title {
-      margin: 35px 0 18px;
-      border-right: 4px solid #d71920;
-      padding-right: 12px;
     }
 
     .cards {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 18px;
+      gap: 15px;
+      margin-top: 22px;
     }
 
     .card {
-      background: #171216;
-      border: 1px solid #482027;
-      border-radius: 14px;
-      padding: 24px;
-      transition: .2s;
-    }
-
-    .card:hover {
-      transform: translateY(-4px);
-      border-color: #d71920;
-    }
-
-    .card .icon {
-      font-size: 32px;
+      padding: 22px;
+      background: rgba(14, 14, 18, .96);
+      border: 1px solid #34343b;
+      border-radius: 16px;
     }
 
     .card h3 {
-      margin-bottom: 10px;
+      margin-top: 0;
+      color: #f04455;
     }
 
     .card p {
-      color: #c5b9bc;
-      line-height: 1.8;
-      font-size: 14px;
+      color: #c2c2ca;
+      line-height: 1.9;
     }
 
-    .status {
-      margin-top: 18px;
-      color: #ffb7bc;
-      overflow-wrap: anywhere;
-      line-height: 1.7;
+    .hidden {
+      display: none !important;
     }
 
     footer {
+      padding: 25px;
       text-align: center;
-      color: #9e8d91;
-      padding: 28px 15px;
-      border-top: 1px solid #482027;
-      margin-top: 50px;
+      color: #9999a3;
     }
 
     button:disabled {
-      opacity: .6;
+      opacity: .55;
       cursor: wait;
+      transform: none;
     }
   </style>
 </head>
 
 <body>
   <header>
-    <div class="brand">
-      <span class="flag"><span></span><span></span><span></span></span>
-      مركز الخدمات الروسي
-    </div>
-
-    <button id="loginBtn" class="login-btn">
-      تسجيل الدخول عبر Discord
+    <div class="logo">RUSSIA <span>〢 SERVICES</span></div>
+    <button id="loginBtn" class="primary" onclick="loginDiscord()">
+      تسجيل الدخول بالديسكورد
     </button>
-
-    <button id="logoutBtn" class="logout-btn" style="display:none">
+    <button id="logoutBtn" class="secondary hidden" onclick="logout()">
       تسجيل الخروج
     </button>
   </header>
 
   <main>
     <section class="hero">
-      <h1>مرحبًا بك في <strong>مركز الخدمات</strong></h1>
-      <p>
-        منصة الخدمات والتذاكر والمساعدة الخاصة بالمجتمع.
-        سجّل دخولك عبر Discord للمتابعة.
+      <div class="flag">
+        <div class="white"></div>
+        <div class="blue"></div>
+        <div class="red"></div>
+      </div>
+
+      <h1>مرحباً بك في <span>مركز الخدمات</span></h1>
+      <p class="description">
+        سجّل دخولك بحساب الديسكورد للتحقق من عضويتك ورتبتك.
+        إذا كانت لديك رتبة الدخول المطلوبة، ستتمكن من متابعة خدمات الموقع.
       </p>
 
-      <div id="profile" class="profile"></div>
-      <div id="status" class="status"></div>
+      <div class="actions">
+        <button class="primary" id="heroLoginBtn" onclick="loginDiscord()">
+          الدخول عبر Discord
+        </button>
+        <button class="secondary" onclick="openDiscord()">
+          دخول سيرفر الديسكورد
+        </button>
+      </div>
     </section>
 
-    <h2 class="section-title">الخدمات المتاحة</h2>
+    <section class="panel">
+      <h2>حالة حسابك</h2>
+      <div id="status" class="status" aria-live="polite">
+        جارٍ تجهيز الموقع...
+      </div>
+      <div id="profile" class="status hidden"></div>
+    </section>
 
-    <section class="cards">
-      <article class="card">
-        <div class="icon">🎫</div>
-        <h3>التذاكر</h3>
-        <p>مكان مخصص لطلبات المساعدة والتواصل مع فريق الإدارة.</p>
-      </article>
+    <section id="memberArea" class="hidden">
+      <div class="cards">
+        <div class="card">
+          <h3>🎫 التذاكر</h3>
+          <p>تم التحقق من رتبتك. واجهة إنشاء التذاكر وإدارتها تحتاج إلى ربط إضافي بقاعدة البيانات.</p>
+        </div>
 
-      <article class="card">
-        <div class="icon">💬</div>
-        <h3>غرف المحادثة</h3>
-        <p>واجهة مخصصة لمحادثات المجتمع بعد تجهيز صلاحيات الوصول.</p>
-      </article>
+        <div class="card">
+          <h3>💬 المحادثات</h3>
+          <p>تم تجهيز التحقق من الدخول. نظام المحادثات الفعلي يحتاج إلى واجهة وربط الرسائل بقاعدة البيانات.</p>
+        </div>
 
-      <article class="card">
-        <div class="icon">🛡️</div>
-        <h3>الإدارة والسجلات</h3>
-        <p>خدمات إدارية وسجلات الموقع عند اكتمال إعدادات الصلاحيات.</p>
-      </article>
+        <div id="staffCard" class="card hidden">
+          <h3>🛡️ الإدارة</h3>
+          <p>تم اكتشاف رتبة المسؤولين. صلاحيات الإدارة الفعلية يجب تطبيقها أيضًا في سياسات قاعدة البيانات.</p>
+        </div>
+      </div>
     </section>
   </main>
 
   <footer>
-    مركز الخدمات الروسي © 2026
+    RUSSIA SERVICES — جميع الحقوق محفوظة
   </footer>
 
   <script>
-    // ضع هنا مفتاح Supabase Publishable أو anon العام فقط.
-    // لا تضع Bot Token أو Client Secret أو sb_secret.
     const SUPABASE_URL =
       "https://hivbjjtdxezftpewovhy.supabase.co";
 
+    // ضع هنا مفتاح Supabase Publishable أو anon العام فقط.
+    // لا تضع service_role أو sb_secret في ملف الموقع.
     const SUPABASE_PUBLISHABLE_KEY =
       "ضع_مفتاح_Supabase_العام_هنا";
 
     const SITE_URL =
       "https://m100d200m-cloud.github.io/my-discord-site/";
 
-    const statusBox = document.getElementById("status");
+    const DISCORD_SERVER_URL =
+      "https://discord.com/channels/1531735994942886030";
+
+    const statusEl = document.getElementById("status");
+    const profileEl = document.getElementById("profile");
     const loginBtn = document.getElementById("loginBtn");
     const logoutBtn = document.getElementById("logoutBtn");
-    const profileBox = document.getElementById("profile");
+    const heroLoginBtn = document.getElementById("heroLoginBtn");
+    const memberArea = document.getElementById("memberArea");
+    const staffCard = document.getElementById("staffCard");
 
-    let supabaseClient = null;
+    let checkingAccess = false;
+    let lastCheckedUserId = null;
 
-    function showStatus(message) {
-      statusBox.textContent = message;
+    if (
+      !window.supabase ||
+      !SUPABASE_PUBLISHABLE_KEY ||
+      SUPABASE_PUBLISHABLE_KEY === "ضع_مفتاح_Supabase_العام_هنا"
+    ) {
+      statusEl.textContent =
+        "أضف مفتاح Supabase العام في الكود ثم احفظ الملف.";
     }
 
-    function setLoggedIn(user) {
-      if (user) {
-        loginBtn.style.display = "none";
-        logoutBtn.style.display = "inline-block";
-        profileBox.style.display = "block";
+    const supabaseClient = window.supabase
+      ? window.supabase.createClient(
+          SUPABASE_URL,
+          SUPABASE_PUBLISHABLE_KEY
+        )
+      : null;
 
-        const discordName =
-          user.user_metadata?.full_name ||
-          user.user_metadata?.name ||
-          user.user_metadata?.preferred_username ||
-          user.email ||
-          "مستخدم Discord";
-
-        profileBox.textContent = "تم تسجيل الدخول: " + discordName;
-        showStatus("تم تسجيل الدخول بنجاح.");
-      } else {
-        loginBtn.style.display = "inline-block";
-        logoutBtn.style.display = "none";
-        profileBox.style.display = "none";
-      }
+    function setStatus(message) {
+      statusEl.textContent = message;
     }
 
-    async function initialize() {
-      if (
-        !window.supabase ||
-        SUPABASE_PUBLISHABLE_KEY === "1558493155316473947"
-      ) {
-        loginBtn.disabled = true;
-        showStatus("يلزم وضع مفتاح Supabase العام في إعدادات الملف أولًا.");
+    function setLoginState(isLoggedIn) {
+      loginBtn.classList.toggle("hidden", isLoggedIn);
+      heroLoginBtn.classList.toggle("hidden", isLoggedIn);
+      logoutBtn.classList.toggle("hidden", !isLoggedIn);
+    }
+
+    async function loginDiscord() {
+      if (!supabaseClient) {
+        setStatus("تأكد من إضافة مفتاح Supabase العام أولاً.");
         return;
       }
 
-      supabaseClient = window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_PUBLISHABLE_KEY,
-        {
-          auth: {
-            flowType: "pkce",
-            persistSession: true,
-            autoRefreshToken: true,
-            detectSessionInUrl: true
-          }
-        }
-      );
+      loginBtn.disabled = true;
+      heroLoginBtn.disabled = true;
+      setStatus("جارٍ تحويلك إلى تسجيل الدخول بالديسكورد...");
 
-      loginBtn.addEventListener("click", async () => {
-        loginBtn.disabled = true;
-        showStatus("جارٍ فتح تسجيل الدخول...");
+      try {
+        const { error } =
+          await supabaseClient.auth.signInWithOAuth({
+            provider: "discord",
+            options: {
+              redirectTo: SITE_URL,
+              scopes: "identify"
+            }
+          });
 
-        try {
-          const { error } =
-            await supabaseClient.auth.signInWithOAuth({
-              provider: "discord",
-              options: {
-                redirectTo: SITE_URL,
-                scopes: "identify"
-              }
-            });
+        if (error) throw error;
+      } catch (error) {
+        console.error(error);
+        setStatus("تعذر بدء تسجيل الدخول: " + error.message);
+        loginBtn.disabled = false;
+        heroLoginBtn.disabled = false;
+      }
+    }
 
-          if (error) throw error;
-        } catch (error) {
-          showStatus("تعذر تسجيل الدخول: " + error.message);
-          loginBtn.disabled = false;
-        }
-      });
+    async function logout() {
+      if (!supabaseClient) return;
 
-      logoutBtn.addEventListener("click", async () => {
-        logoutBtn.disabled = true;
+      setStatus("جارٍ تسجيل الخروج...");
 
-        const { error } = await supabaseClient.auth.signOut();
+      const { error } = await supabaseClient.auth.signOut();
 
-        logoutBtn.disabled = false;
+      if (error) {
+        setStatus("تعذر تسجيل الخروج: " + error.message);
+        return;
+      }
+
+      lastCheckedUserId = null;
+      profileEl.classList.add("hidden");
+      memberArea.classList.add("hidden");
+      staffCard.classList.add("hidden");
+      setLoginState(false);
+      setStatus("تم تسجيل الخروج بنجاح.");
+    }
+
+    async function openDiscord() {
+      window.open(DISCORD_SERVER_URL, "_blank", "noopener");
+    }
+
+    async function verifyDiscordAccess(user) {
+      if (!supabaseClient || checkingAccess) return;
+
+      if (lastCheckedUserId === user.id) return;
+
+      checkingAccess = true;
+      lastCheckedUserId = user.id;
+
+      setLoginState(true);
+      memberArea.classList.add("hidden");
+      staffCard.classList.add("hidden");
+
+      profileEl.classList.remove("hidden");
+      profileEl.textContent =
+        "تم تسجيل الدخول. جارٍ التحقق من رتبتك في الديسكورد...";
+
+      setStatus("جارٍ فحص عضويتك وصلاحيات الدخول...");
+
+      try {
+        const { data, error } =
+          await supabaseClient.functions.invoke("site-api", {
+            body: {}
+          });
 
         if (error) {
-          showStatus("تعذر تسجيل الخروج: " + error.message);
+          console.error("site-api error:", error);
+          lastCheckedUserId = null;
+          setStatus(
+            "تعذر التحقق من الرتبة. تأكد من نشر الوظيفة وإعدادات البوت، ثم حدّث الصفحة."
+          );
+          profileEl.textContent = "";
           return;
         }
 
-        setLoggedIn(null);
-        showStatus("تم تسجيل الخروج.");
-      });
+        if (!data || data.success !== true) {
+          lastCheckedUserId = null;
+          setStatus("لم يكتمل التحقق من حسابك.");
+          profileEl.textContent = "";
+          return;
+        }
 
-      const { data, error } = await supabaseClient.auth.getSession();
+        if (!data.hasAccess) {
+          setStatus(
+            "تم تسجيل الدخول، لكن حسابك لا يحمل رتبة الدخول المطلوبة للموقع."
+          );
+          profileEl.textContent =
+            "Discord ID: " + (data.discordId || "غير متوفر");
+          return;
+        }
+
+        setStatus("تم التحقق من رتبتك بنجاح. أهلاً بك!");
+
+        profileEl.textContent =
+          "Discord ID: " + data.discordId +
+          (data.isStaff ? " — تم التحقق من رتبة المسؤولين." : "");
+
+        memberArea.classList.remove("hidden");
+
+        if (data.isStaff) {
+          staffCard.classList.remove("hidden");
+        }
+      } catch (error) {
+        console.error(error);
+        lastCheckedUserId = null;
+        setStatus("حدث خطأ أثناء التحقق. افتح Console لمعرفة التفاصيل.");
+        profileEl.textContent = "";
+      } finally {
+        checkingAccess = false;
+      }
+    }
+
+    async function initializeSite() {
+      if (!supabaseClient) return;
+
+      const {
+        data: { session },
+        error
+      } = await supabaseClient.auth.getSession();
 
       if (error) {
-        showStatus("تعذر التحقق من الجلسة: " + error.message);
+        setStatus("تعذر قراءة جلسة الدخول.");
         return;
       }
 
-      setLoggedIn(data.session?.user || null);
+      if (session?.user) {
+        await verifyDiscordAccess(session.user);
+      } else {
+        setLoginState(false);
+        setStatus("سجّل الدخول بالديسكورد للتحقق من صلاحياتك.");
+      }
 
-      supabaseClient.auth.onAuthStateChange((_event, session) => {
-        setLoggedIn(session?.user || null);
+      supabaseClient.auth.onAuthStateChange((event, session) => {
+        if (event === "SIGNED_OUT") {
+          lastCheckedUserId = null;
+          setLoginState(false);
+          memberArea.classList.add("hidden");
+          profileEl.classList.add("hidden");
+          setStatus("تم تسجيل الخروج. سجّل الدخول للمتابعة.");
+          return;
+        }
+
+        if (event === "SIGNED_IN" && session?.user) {
+          lastCheckedUserId = null;
+
+          // تأخير بسيط لتجنب تنفيذ طلبات المصادقة داخل callback.
+          setTimeout(() => {
+            verifyDiscordAccess(session.user);
+          }, 0);
+        }
       });
     }
 
-    initialize();
+    initializeSite();
   </script>
 </body>
 </html>
