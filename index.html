@@ -1,78 +1,353 @@
-```html
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>مركز الخدمات | روسيا</title>
-<style>
-*{box-sizing:border-box}
-:root{--red:#e51b2b;--dark:#09090d;--panel:#171116;--border:#462027}
-body{margin:0;font-family:Arial,sans-serif;background:var(--dark);color:#fff}
-header{padding:18px 20px;text-align:center;background:#14090c;border-bottom:1px solid var(--border)}
-header h1{color:#ff3344;margin:0 0 8px}
-header p{color:#d6bfc3;margin:0}
-.flag{width:100%;height:190px;position:relative;overflow:hidden;box-shadow:0 8px 35px #000}
-.flag div{height:33.333%;width:100%}
-.white{background:#fff}.blue{background:#1746a2}.red{background:#d52b1e}
-.flag:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#0005,transparent 40%,#0005);pointer-events:none}
-.hero{text-align:center;padding:55px 20px 40px;background:radial-gradient(ellipse at top,#501018 0%,#18090d 50%,#09090d 100%)}
-.hero h2{font-size:clamp(27px,5vw,42px);margin:0 0 16px;text-shadow:0 0 25px #e51b2b66}
-.hero p{color:#d0b8bd;line-height:2;max-width:650px;margin:auto}
-.button{display:inline-block;background:var(--red);color:white;text-decoration:none;padding:14px 25px;border-radius:8px;margin:18px 7px 0;font-weight:bold;border:1px solid #ff6571;transition:.2s}
-.button:hover{background:#b60f20;transform:translateY(-2px)}
-.button.secondary{background:#211116;border-color:#642630}
-.section-title{text-align:center;color:#ff4656;margin:25px 0 8px}
-.services{max-width:1000px;margin:auto;padding:25px 20px 55px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
-.card{background:linear-gradient(145deg,#1c1116,#100c10);border:1px solid var(--border);padding:26px 22px;border-radius:13px;text-align:center;transition:.2s}
-.card:hover{border-color:var(--red);transform:translateY(-4px);box-shadow:0 8px 30px #e51b2b12}
-.card h3{color:#ff4656;font-size:21px}
-.card p{color:#c9b7bc;line-height:1.9}
-.status{display:inline-block;background:#341018;color:#ff7d89;padding:7px 13px;border-radius:20px;font-size:13px;margin-top:10px}
-footer{text-align:center;color:#a48d93;padding:25px 15px;border-top:1px solid var(--border);background:#10090c}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مركز الخدمات | روسيا</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      color: #fff;
+      background:
+        linear-gradient(rgba(12, 5, 8, .92), rgba(12, 5, 8, .97)),
+        linear-gradient(to bottom, #fff 0 33.33%, #174a9c 33.33% 66.66%, #d71920 66.66%);
+      min-height: 100vh;
+    }
+
+    header {
+      padding: 18px 7%;
+      background: rgba(10, 8, 10, .94);
+      border-bottom: 2px solid #d71920;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      font-size: 24px;
+      font-weight: bold;
+      color: #ff3038;
+    }
+
+    .flag {
+      display: inline-flex;
+      flex-direction: column;
+      width: 34px;
+      height: 22px;
+      vertical-align: middle;
+      margin-left: 8px;
+      overflow: hidden;
+      border-radius: 3px;
+    }
+
+    .flag span {
+      flex: 1;
+    }
+
+    .flag span:nth-child(1) { background: white; }
+    .flag span:nth-child(2) { background: #174a9c; }
+    .flag span:nth-child(3) { background: #d71920; }
+
+    .login-btn, .logout-btn {
+      border: 0;
+      border-radius: 9px;
+      padding: 12px 18px;
+      background: #d71920;
+      color: white;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .login-btn:hover, .logout-btn:hover {
+      background: #a80e17;
+    }
+
+    main {
+      width: min(1050px, 92%);
+      margin: 45px auto;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 40px 20px;
+      background: linear-gradient(135deg, #260c12, #111116);
+      border: 1px solid #61212a;
+      border-radius: 18px;
+      box-shadow: 0 12px 35px #0008;
+    }
+
+    .hero h1 {
+      font-size: clamp(28px, 5vw, 44px);
+      margin: 0 0 15px;
+    }
+
+    .hero h1 strong {
+      color: #ff3038;
+    }
+
+    .hero p {
+      color: #d5c7c9;
+      line-height: 1.9;
+    }
+
+    .profile {
+      margin: 22px auto 0;
+      padding: 12px;
+      border-radius: 10px;
+      background: #ffffff0b;
+      display: none;
+      max-width: 480px;
+      overflow-wrap: anywhere;
+    }
+
+    .section-title {
+      margin: 35px 0 18px;
+      border-right: 4px solid #d71920;
+      padding-right: 12px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      background: #171216;
+      border: 1px solid #482027;
+      border-radius: 14px;
+      padding: 24px;
+      transition: .2s;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: #d71920;
+    }
+
+    .card .icon {
+      font-size: 32px;
+    }
+
+    .card h3 {
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      color: #c5b9bc;
+      line-height: 1.8;
+      font-size: 14px;
+    }
+
+    .status {
+      margin-top: 18px;
+      color: #ffb7bc;
+      overflow-wrap: anywhere;
+      line-height: 1.7;
+    }
+
+    footer {
+      text-align: center;
+      color: #9e8d91;
+      padding: 28px 15px;
+      border-top: 1px solid #482027;
+      margin-top: 50px;
+    }
+
+    button:disabled {
+      opacity: .6;
+      cursor: wait;
+    }
+  </style>
 </head>
+
 <body>
-<header>
-  <h1>مركز الخدمات</h1>
-  <p>بوابتك الرسمية للخدمات والمجتمع</p>
-</header>
+  <header>
+    <div class="brand">
+      <span class="flag"><span></span><span></span><span></span></span>
+      مركز الخدمات الروسي
+    </div>
 
-<div class="flag" aria-label="علم روسيا">
-  <div class="white"></div>
-  <div class="blue"></div>
-  <div class="red"></div>
-</div>
+    <button id="loginBtn" class="login-btn">
+      تسجيل الدخول عبر Discord
+    </button>
 
-<section class="hero">
-  <h2>مرحباً بك في مركز الخدمات</h2>
-  <p>اجمع خدمات مجتمعك في مكان واحد، وتواصل مع فريق الإدارة، وتابع طلباتك وتذاكرك من خلال واجهة مستوحاة من الألوان الروسية.</p>
-  <a class="button" href="https://discord.com/oauth2/authorize?client_id=1558493155316473947&scope=identify" target="_blank" rel="noopener">تسجيل الدخول عبر Discord</a>
-  <a class="button secondary" href="https://discord.com/" target="_blank" rel="noopener">دخول ديسكورد</a>
-  <div><span class="status">● مركز الخدمات</span></div>
-</section>
+    <button id="logoutBtn" class="logout-btn" style="display:none">
+      تسجيل الخروج
+    </button>
+  </header>
 
-<h2 class="section-title">خدمات الموقع</h2>
-<section class="services">
-  <div class="card">
-    <h3>🎖️ الرتب</h3>
-    <p>عرض الرتب والصلاحيات المتاحة لأعضاء المجتمع.</p>
-  </div>
-  <div class="card">
-    <h3>🎫 التذاكر</h3>
-    <p>واجهة مخصصة لطلبات الدعم والتواصل مع الإدارة.</p>
-  </div>
-  <div class="card">
-    <h3>💬 الغرف والمحادثات</h3>
-    <p>مكان منظم للغرف والرسائل بين أعضاء الموقع.</p>
-  </div>
-  <div class="card">
-    <h3>📋 سجل العمليات</h3>
-    <p>قسم مخصص لمتابعة العمليات الإدارية بعد ربط الصلاحيات.</p>
-  </div>
-</section>
+  <main>
+    <section class="hero">
+      <h1>مرحبًا بك في <strong>مركز الخدمات</strong></h1>
+      <p>
+        منصة الخدمات والتذاكر والمساعدة الخاصة بالمجتمع.
+        سجّل دخولك عبر Discord للمتابعة.
+      </p>
 
-<footer>جميع الحقوق محفوظة © مركز الخدمات</footer>
+      <div id="profile" class="profile"></div>
+      <div id="status" class="status"></div>
+    </section>
+
+    <h2 class="section-title">الخدمات المتاحة</h2>
+
+    <section class="cards">
+      <article class="card">
+        <div class="icon">🎫</div>
+        <h3>التذاكر</h3>
+        <p>مكان مخصص لطلبات المساعدة والتواصل مع فريق الإدارة.</p>
+      </article>
+
+      <article class="card">
+        <div class="icon">💬</div>
+        <h3>غرف المحادثة</h3>
+        <p>واجهة مخصصة لمحادثات المجتمع بعد تجهيز صلاحيات الوصول.</p>
+      </article>
+
+      <article class="card">
+        <div class="icon">🛡️</div>
+        <h3>الإدارة والسجلات</h3>
+        <p>خدمات إدارية وسجلات الموقع عند اكتمال إعدادات الصلاحيات.</p>
+      </article>
+    </section>
+  </main>
+
+  <footer>
+    مركز الخدمات الروسي © 2026
+  </footer>
+
+  <script>
+    // ضع هنا مفتاح Supabase Publishable أو anon العام فقط.
+    // لا تضع Bot Token أو Client Secret أو sb_secret.
+    const SUPABASE_URL =
+      "https://hivbjjtdxezftpewovhy.supabase.co";
+
+    const SUPABASE_PUBLISHABLE_KEY =
+      "ضع_مفتاح_Supabase_العام_هنا";
+
+    const SITE_URL =
+      "https://m100d200m-cloud.github.io/my-discord-site/";
+
+    const statusBox = document.getElementById("status");
+    const loginBtn = document.getElementById("loginBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const profileBox = document.getElementById("profile");
+
+    let supabaseClient = null;
+
+    function showStatus(message) {
+      statusBox.textContent = message;
+    }
+
+    function setLoggedIn(user) {
+      if (user) {
+        loginBtn.style.display = "none";
+        logoutBtn.style.display = "inline-block";
+        profileBox.style.display = "block";
+
+        const discordName =
+          user.user_metadata?.full_name ||
+          user.user_metadata?.name ||
+          user.user_metadata?.preferred_username ||
+          user.email ||
+          "مستخدم Discord";
+
+        profileBox.textContent = "تم تسجيل الدخول: " + discordName;
+        showStatus("تم تسجيل الدخول بنجاح.");
+      } else {
+        loginBtn.style.display = "inline-block";
+        logoutBtn.style.display = "none";
+        profileBox.style.display = "none";
+      }
+    }
+
+    async function initialize() {
+      if (
+        !window.supabase ||
+        SUPABASE_PUBLISHABLE_KEY === "1558493155316473947"
+      ) {
+        loginBtn.disabled = true;
+        showStatus("يلزم وضع مفتاح Supabase العام في إعدادات الملف أولًا.");
+        return;
+      }
+
+      supabaseClient = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY,
+        {
+          auth: {
+            flowType: "pkce",
+            persistSession: true,
+            autoRefreshToken: true,
+            detectSessionInUrl: true
+          }
+        }
+      );
+
+      loginBtn.addEventListener("click", async () => {
+        loginBtn.disabled = true;
+        showStatus("جارٍ فتح تسجيل الدخول...");
+
+        try {
+          const { error } =
+            await supabaseClient.auth.signInWithOAuth({
+              provider: "discord",
+              options: {
+                redirectTo: SITE_URL,
+                scopes: "identify"
+              }
+            });
+
+          if (error) throw error;
+        } catch (error) {
+          showStatus("تعذر تسجيل الدخول: " + error.message);
+          loginBtn.disabled = false;
+        }
+      });
+
+      logoutBtn.addEventListener("click", async () => {
+        logoutBtn.disabled = true;
+
+        const { error } = await supabaseClient.auth.signOut();
+
+        logoutBtn.disabled = false;
+
+        if (error) {
+          showStatus("تعذر تسجيل الخروج: " + error.message);
+          return;
+        }
+
+        setLoggedIn(null);
+        showStatus("تم تسجيل الخروج.");
+      });
+
+      const { data, error } = await supabaseClient.auth.getSession();
+
+      if (error) {
+        showStatus("تعذر التحقق من الجلسة: " + error.message);
+        return;
+      }
+
+      setLoggedIn(data.session?.user || null);
+
+      supabaseClient.auth.onAuthStateChange((_event, session) => {
+        setLoggedIn(session?.user || null);
+      });
+    }
+
+    initialize();
+  </script>
 </body>
 </html>
-```
