@@ -1,453 +1,907 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>RUSSIA | مركز الخدمات</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <style>
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: Tahoma, Arial, sans-serif;
-      color: white;
-      background: #09090d;
-    }
-
-    header {
-      padding: 20px 6%;
-      background: #111116;
-      border-bottom: 1px solid #292930;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 15px;
-    }
-
-    .logo {
-      font-size: 24px;
-      font-weight: bold;
-      color: #ed3348;
-    }
-
-    .logo span { color: white; }
-
-    main {
-      width: min(900px, 92%);
-      margin: 45px auto;
-    }
-
-    .panel {
-      padding: 30px 22px;
-      background: #131318;
-      border: 1px solid #303039;
-      border-radius: 18px;
-      margin-bottom: 20px;
-      text-align: center;
-    }
-
-    .flag {
-      width: 100px;
-      height: 60px;
-      margin: 0 auto 24px;
-      border-radius: 5px;
-      overflow: hidden;
-    }
-
-    .flag div { height: 33.333%; }
-    .white { background: white; }
-    .blue { background: #17469b; }
-    .red { background: #d51d35; }
-
-    h1 { font-size: clamp(25px, 5vw, 40px); }
-    h1 span { color: #ed3348; }
-
-    p {
-      color: #c5c5ce;
-      line-height: 2;
-    }
-
-    button {
-      padding: 13px 20px;
-      border: 0;
-      border-radius: 9px;
-      cursor: pointer;
-      font-size: 15px;
-      font-weight: bold;
-      margin: 5px;
-    }
-
-    button:disabled {
-      opacity: .6;
-      cursor: wait;
-    }
-
-    .primary {
-      background: #d9233a;
-      color: white;
-    }
-
-    .secondary {
-      background: #292930;
-      color: white;
-      border: 1px solid #42424b;
-    }
-
-    .status {
-      margin-top: 18px;
-      padding: 15px;
-      border-radius: 10px;
-      background: #202027;
-      color: #ededf1;
-      line-height: 1.9;
-      overflow-wrap: anywhere;
-      white-space: pre-wrap;
-    }
-
-    .hidden { display: none !important; }
-
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-      gap: 15px;
-      margin-top: 20px;
-    }
-
-    .card {
-      padding: 20px;
-      border: 1px solid #303039;
-      border-radius: 13px;
-      background: #131318;
-      text-align: right;
-    }
-
-    .card h3 { color: #ed3348; }
-
-    footer {
-      text-align: center;
-      padding: 25px;
-      color: #8c8c98;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RUSSIA | SERVICES</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--bg:#09090d;--panel:#141419;--line:#303039;--red:#d9233a;--muted:#bdbdc8}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:#fff;font-family:Tahoma,Arial,sans-serif}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:18px 5%;background:#111116;border-bottom:1px solid var(--line)}
+.logo{font-weight:bold;font-size:23px;color:#ed3348}
+.logo span{color:#fff}
+main{width:min(1100px,94%);margin:28px auto}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px;margin-bottom:18px}
+h1,h2,h3{margin-top:0}
+h1 span,.redText{color:#ed3348}
+p{color:var(--muted);line-height:1.8}
+button,input,textarea,select{font:inherit;border-radius:9px;padding:11px;border:1px solid #41414b}
+button{cursor:pointer;font-weight:bold;background:var(--red);border:0;color:white;margin:3px}
+button.secondary{background:#292930;border:1px solid #41414b}
+button:disabled{opacity:.5;cursor:wait}
+input,textarea,select{width:100%;background:#0e0e13;color:white;margin:5px 0 12px}
+textarea{min-height:90px;resize:vertical}
+.hidden{display:none!important}
+.nav{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:18px}
+.nav button{background:#292930}
+.nav button.active{background:var(--red)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.item{padding:15px;border:1px solid var(--line);border-radius:12px;margin:10px 0;background:#101015;overflow-wrap:anywhere}
+.status{white-space:pre-wrap;overflow-wrap:anywhere;background:#202027;border-radius:9px;padding:13px;line-height:1.8;margin-top:12px}
+small,.muted{color:var(--muted)}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.badge{display:inline-block;padding:4px 8px;border-radius:7px;background:#302027;color:#ff9aa7;font-size:12px}
+footer{text-align:center;padding:24px;color:#888}
+</style>
 </head>
-
 <body>
-  <header>
-    <div class="logo">RUSSIA <span>〢 SERVICES</span></div>
 
-    <div>
-      <button id="loginBtn" class="primary">
-        تسجيل الدخول بالديسكورد
-      </button>
+<header>
+  <div class="logo">RUSSIA <span>〢 SERVICES</span></div>
+  <div class="row">
+    <span id="who" class="muted"></span>
+    <button id="login">تسجيل الدخول بالديسكورد</button>
+    <button id="logout" class="secondary hidden">تسجيل الخروج</button>
+  </div>
+</header>
 
-      <button id="logoutBtn" class="secondary hidden">
-        تسجيل الخروج
+<main>
+  <section class="panel">
+    <h1>مركز الخدمات <span>🇷🇺</span></h1>
+    <p>التذاكر · المحادثات · الفعاليات · إعلانات الرحلات</p>
+    <div id="status" class="status">جارٍ تجهيز الموقع...</div>
+  </section>
+
+  <div id="app" class="hidden">
+    <div class="nav">
+      <button data-page="tickets" class="active">🎫 التذاكر</button>
+      <button data-page="chat">💬 المحادثات</button>
+      <button data-page="events">🏆 الفعاليات</button>
+      <button data-page="trips">🛫 إعلانات الرحلات</button>
+      <button data-page="admin" id="adminNav" class="hidden">🛡️ الإدارة</button>
+    </div>
+
+    <section id="tickets" class="panel page">
+      <h2>🎫 التذاكر</h2>
+      <p>اختر نوع التذكرة واكتب التفاصيل. تظهر ردود الإدارة داخل التذكرة ويمكنك الرد عليها.</p>
+
+      <form id="ticketForm">
+        <label>نوع التذكرة</label>
+        <select id="ticketType" required>
+          <option value="technical">دعم فني</option>
+          <option value="complaint">شكوى</option>
+        </select>
+        <label>التفاصيل</label>
+        <textarea id="ticketBody" maxlength="4000" required placeholder="اشرح طلبك..."></textarea>
+        <button type="submit">فتح تذكرة</button>
+      </form>
+
+      <h3>تذاكري</h3>
+      <div id="ticketList"></div>
+      <div id="ticketDetail"></div>
+    </section>
+
+    <section id="chat" class="panel page hidden">
+      <h2>💬 محادثات الدعم</h2>
+      <p>أنشئ محادثة دعم؛ لا يستطيع المستخدم رؤية محادثات الآخرين.</p>
+      <form id="chatForm">
+        <label>موضوع المحادثة</label>
+        <input id="chatTitle" maxlength="120" required>
+        <button type="submit">بدء محادثة</button>
+      </form>
+      <div id="chatList"></div>
+      <div id="chatDetail"></div>
+    </section>
+
+    <section id="events" class="panel page hidden">
+      <h2>🏆 الفعاليات</h2>
+      <div id="eventList"></div>
+      <div id="eventAdminForm" class="hidden">
+        <h3>إنشاء فعالية (الإدارة)</h3>
+        <form id="eventForm">
+          <label>اسم الفعالية</label>
+          <input id="eventTitle" maxlength="120" required>
+          <label>الوصف</label>
+          <textarea id="eventDescription" maxlength="4000"></textarea>
+          <label>الموعد</label>
+          <input id="eventDate" type="datetime-local" required>
+          <label>عدد المقاعد (0 = بلا حد)</label>
+          <input id="eventCapacity" type="number" min="0" max="10000" value="0">
+          <button type="submit">نشر الفعالية</button>
+        </form>
+      </div>
+    </section>
+
+    <section id="trips" class="panel page hidden">
+      <h2>🛫 إعلانات الرحلات</h2>
+      <div id="tripList"></div>
+      <div id="tripAdminForm" class="hidden">
+        <h3>إعلان رحلة (الإدارة)</h3>
+        <form id="tripForm">
+          <label>عنوان الرحلة</label>
+          <input id="tripTitle" maxlength="120" required>
+          <label>الوجهة / التفاصيل</label>
+          <textarea id="tripDescription" maxlength="4000" required></textarea>
+          <label>موعد الرحلة</label>
+          <input id="tripDate" type="datetime-local" required>
+          <label>عدد المقاعد (0 = بلا حد)</label>
+          <input id="tripCapacity" type="number" min="0" max="10000" value="0">
+          <button type="submit">نشر الرحلة</button>
+        </form>
+      </div>
+    </section>
+
+    <section id="admin" class="panel page hidden">
+      <h2>🛡️ لوحة الإدارة</h2>
+      <p>صلاحيات لوحة الإدارة تؤخذ من التحقق في bright-api ومن جدول site_staff في قاعدة البيانات.</p>
+      <p>يمكن إدارة الفعاليات والرحلات من الأقسام المخصصة لها.</p>
+      <h3>إدارة التذاكر المفتوحة</h3>
+      <div id="adminTickets"></div>
+    </section>
+  </div>
+</main>
+
+<footer>RUSSIA SERVICES</footer>
+
+<script>
+const SUPABASE_URL = "https://hivbjjtdxezftpewovhy.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_yalLdE_KrroBxB-XaiI1aA_9__jfaKb";
+const SITE_URL = "https://m100d200m-cloud.github.io/my-discord-site/";
+const DISCORD_SERVER_URL = "https://discord.com/channels/1531735994942886030";
+
+const $ = id => document.getElementById(id);
+
+const client = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY,
+  {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true,
+      flowType: "pkce"
+    }
+  }
+);
+
+let currentUser = null;
+let isStaff = false;
+let selectedTicket = null;
+let selectedChat = null;
+
+function status(message) {
+  $("status").textContent = message;
+}
+
+function esc(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[char]);
+}
+
+function date(value) {
+  return value ? new Date(value).toLocaleString("ar-SA") : "غير محدد";
+}
+
+function showApp(on) {
+  $("app").classList.toggle("hidden", !on);
+  $("login").classList.toggle("hidden", on);
+  $("logout").classList.toggle("hidden", !on);
+}
+
+async function api(path, body = {}) {
+  const { data: { session } } = await client.auth.getSession();
+
+  if (!session?.access_token) {
+    throw new Error("سجّل الدخول أولًا.");
+  }
+
+  const response = await fetch(
+    SUPABASE_URL + "/functions/v1/bright-api",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "apikey": SUPABASE_PUBLISHABLE_KEY,
+        "Authorization": "Bearer " + session.access_token
+      },
+      body: JSON.stringify({
+        action: path,
+        ...body
+      })
+    }
+  );
+
+  const result = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    throw new Error(result.error || "تعذر تنفيذ الطلب");
+  }
+
+  return result;
+}
+
+async function checkRole() {
+  try {
+    const result = await api("verify", {});
+
+    isStaff = !!(result.isStaff || result.is_staff);
+
+    $("adminNav").classList.toggle("hidden", !isStaff);
+    $("eventAdminForm").classList.toggle("hidden", !isStaff);
+    $("tripAdminForm").classList.toggle("hidden", !isStaff);
+
+    $("who").textContent = currentUser.email || "تم تسجيل الدخول";
+
+    status("تم تسجيل الدخول والتحقق من رتبتك بنجاح.");
+    showApp(true);
+
+    await refreshAll();
+  } catch (error) {
+    console.error(error);
+    status("تعذر التحقق من الرتبة: " + error.message);
+    showApp(false);
+  }
+}
+
+async function signIn() {
+  const { error } = await client.auth.signInWithOAuth({
+    provider: "discord",
+    options: {
+      redirectTo: SITE_URL,
+      scopes: "identify"
+    }
+  });
+
+  if (error) {
+    status("تعذر تسجيل الدخول: " + error.message);
+  }
+}
+
+async function refreshAll() {
+  const results = await Promise.allSettled([
+    loadTickets(),
+    loadChats(),
+    loadEvents(),
+    loadTrips(),
+    loadAdminTickets()
+  ]);
+
+  results.forEach(result => {
+    if (result.status === "rejected") {
+      console.error(result.reason);
+    }
+  });
+}
+
+function ticketStatus(value) {
+  return {
+    open: "🟢 مفتوحة",
+    claimed: "🟡 مستلمة من الإدارة",
+    closed: "🔴 مغلقة"
+  }[value] || value;
+}
+
+/* =========================
+   التذاكر
+========================= */
+
+async function loadTickets() {
+  const { data, error } = await client
+    .from("tickets")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    $("ticketList").textContent = "تعذر تحميل التذاكر: " + error.message;
+    throw error;
+  }
+
+  const ownTickets = (data || []).filter(ticket =>
+    isStaff || ticket.owner_id === currentUser.id
+  );
+
+  $("ticketList").innerHTML = ownTickets.map(ticket => `
+    <div class="item">
+      <b>${esc(ticket.ticket_type === "complaint" ? "شكوى" : "دعم فني")}</b>
+      <span class="badge">${esc(ticketStatus(ticket.status))}</span>
+      <p>${esc(ticket.body || "")}</p>
+      <small>${date(ticket.created_at)}</small>
+      <br>
+      <button type="button" onclick="openTicket('${ticket.id}')">
+        فتح التذكرة
       </button>
     </div>
-  </header>
+  `).join("") || "<p>لا توجد تذاكر حتى الآن.</p>";
+}
 
-  <main>
-    <section class="panel">
-      <div class="flag">
-        <div class="white"></div>
-        <div class="blue"></div>
-        <div class="red"></div>
+window.openTicket = async function(id) {
+  selectedTicket = id;
+
+  const { data: ticket, error } = await client
+    .from("tickets")
+    .select("*")
+    .eq("id", id)
+    .single();
+
+  if (error) {
+    alert("تعذر فتح التذكرة: " + error.message);
+    return;
+  }
+
+  if (!isStaff && ticket.owner_id !== currentUser.id) {
+    alert("لا تملك صلاحية مشاهدة هذه التذكرة.");
+    return;
+  }
+
+  const { data: messages, error: messageError } = await client
+    .from("ticket_messages")
+    .select("*")
+    .eq("ticket_id", id)
+    .order("created_at", { ascending: true });
+
+  if (messageError) {
+    alert("تعذر تحميل الردود: " + messageError.message);
+    return;
+  }
+
+  const canReply = ticket.status !== "closed";
+
+  $("ticketDetail").innerHTML = `
+    <div class="item">
+      <h3>${esc(ticket.ticket_type === "complaint" ? "شكوى" : "دعم فني")}</h3>
+      <span class="badge">${esc(ticketStatus(ticket.status))}</span>
+      <p>${esc(ticket.body || "")}</p>
+
+      <h3>المحادثة</h3>
+
+      <div id="ticketMessages">
+        ${(messages || []).map(message => `
+          <div class="item">
+            <b>
+              ${message.sender_is_staff
+                ? "الإدارة"
+                : message.sender_id === currentUser.id
+                  ? "أنت"
+                  : "العضو"}:
+            </b>
+            <p>${esc(message.body)}</p>
+            <small>${date(message.created_at)}</small>
+          </div>
+        `).join("") || "<p>لا توجد ردود حتى الآن.</p>"}
       </div>
 
-      <h1>مرحباً بك في <span>مركز الخدمات</span></h1>
+      ${isStaff && ticket.status === "open"
+        ? `<button type="button" onclick="claimTicket('${id}')">استلام التذكرة</button>`
+        : ""}
 
-      <p>سجّل دخولك بحساب Discord للتحقق من عضويتك ورتبتك.</p>
+      ${canReply ? `
+        <form id="ticketReply">
+          <label>اكتب ردك</label>
+          <textarea id="ticketReplyBody" maxlength="4000" required placeholder="اكتب رسالتك هنا..."></textarea>
+          <button type="submit">إرسال الرد</button>
+        </form>
+      ` : "<p>التذكرة مغلقة ولا يمكن الرد عليها.</p>"}
 
-      <button id="mainLoginBtn" class="primary">
-        الدخول عبر Discord
-      </button>
+      ${isStaff && ticket.status !== "closed"
+        ? `<button class="secondary" type="button" onclick="closeTicket('${id}')">إغلاق التذكرة</button>`
+        : ""}
+    </div>
+  `;
 
-      <button id="serverBtn" class="secondary">
-        دخول السيرفر
-      </button>
-    </section>
+  const replyForm = $("ticketReply");
 
-    <section class="panel">
-      <h2>حالة الحساب</h2>
-      <div id="status" class="status" aria-live="polite">
-        جارٍ تجهيز الموقع...
-      </div>
-      <div id="profile" class="status hidden"></div>
-    </section>
+  if (replyForm) {
+    replyForm.addEventListener("submit", async event => {
+      event.preventDefault();
 
-    <section id="memberArea" class="hidden">
-      <div class="cards">
-        <div class="card">
-          <h3>🎫 التذاكر</h3>
-          <p>تم السماح لك بالدخول. واجهة التذاكر تحتاج إلى ربط منفصل.</p>
-        </div>
+      const body = $("ticketReplyBody").value.trim();
+      if (!body) return;
 
-        <div class="card">
-          <h3>💬 المحادثات</h3>
-          <p>تم التحقق من صلاحية الدخول. نظام الرسائل يحتاج إلى ربط منفصل.</p>
-        </div>
+      const { error: insertError } = await client
+        .from("ticket_messages")
+        .insert({
+          ticket_id: id,
+          sender_id: currentUser.id,
+          body,
+          sender_is_staff: isStaff
+        });
 
-        <div id="staffCard" class="card hidden">
-          <h3>🛡️ الإدارة</h3>
-          <p>تم التعرف على رتبة المسؤولين.</p>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer>RUSSIA SERVICES</footer>
-
-  <script>
-    const SUPABASE_URL =
-      "https://hivbjjtdxezftpewovhy.supabase.co";
-
-    const SUPABASE_PUBLISHABLE_KEY =
-      "sb_publishable_yalLdE_KrroBxB-XaiI1aA_9__jfaKb";
-
-    const SITE_URL =
-      "https://m100d200m-cloud.github.io/my-discord-site/";
-
-    const DISCORD_SERVER_URL =
-      "https://discord.com/channels/1531735994942886030";
-
-    const statusEl = document.getElementById("status");
-    const profileEl = document.getElementById("profile");
-    const loginBtn = document.getElementById("loginBtn");
-    const mainLoginBtn = document.getElementById("mainLoginBtn");
-    const logoutBtn = document.getElementById("logoutBtn");
-    const memberArea = document.getElementById("memberArea");
-    const staffCard = document.getElementById("staffCard");
-
-    function setStatus(message) {
-      statusEl.textContent = message;
-    }
-
-    function setLoggedIn(loggedIn) {
-      loginBtn.classList.toggle("hidden", loggedIn);
-      mainLoginBtn.classList.toggle("hidden", loggedIn);
-      logoutBtn.classList.toggle("hidden", !loggedIn);
-    }
-
-    const supabaseClient = window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_PUBLISHABLE_KEY,
-      {
-        auth: {
-          persistSession: true,
-          autoRefreshToken: true,
-          detectSessionInUrl: true,
-          flowType: "pkce",
-          storage: window.localStorage
-        }
-      }
-    );
-
-    let verificationInProgress = false;
-    let verifiedUserId = null;
-
-    async function loginDiscord() {
-      loginBtn.disabled = true;
-      mainLoginBtn.disabled = true;
-      setStatus("جارٍ تحويلك إلى Discord...");
-
-      try {
-        const { error } =
-          await supabaseClient.auth.signInWithOAuth({
-            provider: "discord",
-            options: {
-              redirectTo: SITE_URL,
-              scopes: "identify"
-            }
-          });
-
-        if (error) throw error;
-      } catch (error) {
-        console.error("Discord login error:", error);
-        setStatus("تعذر بدء تسجيل الدخول: " + error.message);
-        loginBtn.disabled = false;
-        mainLoginBtn.disabled = false;
-      }
-    }
-
-    async function logout() {
-      setStatus("جارٍ تسجيل الخروج...");
-
-      const { error } = await supabaseClient.auth.signOut();
-
-      if (error) {
-        setStatus("تعذر تسجيل الخروج: " + error.message);
+      if (insertError) {
+        alert("تعذر إرسال الرد: " + insertError.message);
         return;
       }
 
-      verifiedUserId = null;
-      memberArea.classList.add("hidden");
-      profileEl.classList.add("hidden");
-      staffCard.classList.add("hidden");
-      setLoggedIn(false);
-      loginBtn.disabled = false;
-      mainLoginBtn.disabled = false;
-      setStatus("تم تسجيل الخروج بنجاح.");
+      await openTicket(id);
+      await loadTickets();
+      await loadAdminTickets();
+    });
+  }
+};
+
+window.claimTicket = async function(id) {
+  if (!isStaff) {
+    alert("الإدارة فقط تستطيع استلام التذاكر.");
+    return;
+  }
+
+  const { error } = await client
+    .from("tickets")
+    .update({
+      status: "claimed",
+      claimed_by: currentUser.id
+    })
+    .eq("id", id)
+    .eq("status", "open");
+
+  if (error) {
+    alert("تعذر استلام التذكرة: " + error.message);
+    return;
+  }
+
+  await loadTickets();
+  await loadAdminTickets();
+  await openTicket(id);
+};
+
+window.closeTicket = async function(id) {
+  if (!isStaff) {
+    alert("الإدارة فقط تستطيع إغلاق التذاكر.");
+    return;
+  }
+
+  if (!confirm("هل تريد إغلاق هذه التذكرة؟")) return;
+
+  const { error } = await client
+    .from("tickets")
+    .update({ status: "closed" })
+    .eq("id", id);
+
+  if (error) {
+    alert("تعذر إغلاق التذكرة: " + error.message);
+    return;
+  }
+
+  await loadTickets();
+  await loadAdminTickets();
+  await openTicket(id);
+};
+
+$("ticketForm").addEventListener("submit", async event => {
+  event.preventDefault();
+
+  if (!currentUser) {
+    alert("سجّل الدخول أولًا.");
+    return;
+  }
+
+  const type = $("ticketType").value;
+  const body = $("ticketBody").value.trim();
+
+  if (!body) return;
+
+  const submitButton = $("ticketForm").querySelector("button");
+  submitButton.disabled = true;
+
+  try {
+    const { data, error } = await client
+      .from("tickets")
+      .insert({
+        owner_id: currentUser.id,
+        title: type === "complaint" ? "شكوى" : "دعم فني",
+        ticket_type: type,
+        body
+      })
+      .select()
+      .single();
+
+    if (error) {
+      throw error;
     }
 
-    async function verifyAccess(user) {
-      if (verificationInProgress) return;
-      if (verifiedUserId === user.id) return;
+    $("ticketBody").value = "";
 
-      verificationInProgress = true;
-      setLoggedIn(true);
-      memberArea.classList.add("hidden");
-      staffCard.classList.add("hidden");
-      profileEl.classList.add("hidden");
+    await loadTickets();
+    await openTicket(data.id);
 
-      setStatus("تم تسجيل الدخول. جارٍ التحقق من رتبتك...");
+    alert("تم فتح التذكرة بنجاح.");
+  } catch (error) {
+    alert("تعذر فتح التذكرة: " + error.message);
+  } finally {
+    submitButton.disabled = false;
+  }
+});
 
-      try {
-        // إرسال رمز جلسة المستخدم إلى bright-api
-        const {
-          data: { session },
-          error: sessionError
-        } = await supabaseClient.auth.getSession();
+/* =========================
+   المحادثات
+========================= */
 
-        if (sessionError) throw sessionError;
+async function loadChats() {
+  const { data, error } = await client
+    .from("support_chats")
+    .select("*")
+    .order("created_at", { ascending: false });
 
-        if (!session?.access_token) {
-          throw new Error("انتهت جلسة الدخول. سجّل دخولك مرة أخرى.");
-        }
+  if (error) {
+    $("chatList").textContent = "تعذر تحميل المحادثات: " + error.message;
+    throw error;
+  }
 
-        const { data, error } =
-          await supabaseClient.functions.invoke("bright-api", {
-            body: {},
-            headers: {
-              Authorization: "Bearer " + session.access_token
-            }
-          });
+  const ownChats = (data || []).filter(chat =>
+    isStaff || chat.owner_id === currentUser.id
+  );
 
-        if (error) {
-          console.error("bright-api request error:", error, error.context);
+  $("chatList").innerHTML = ownChats.map(chat => `
+    <div class="item">
+      <b>${esc(chat.title)}</b>
+      <span class="badge">${esc(chat.status || "مفتوحة")}</span>
+      <br>
+      <small>${date(chat.created_at)}</small>
+      <br>
+      <button type="button" onclick="openChat('${chat.id}')">فتح المحادثة</button>
+    </div>
+  `).join("") || "<p>لا توجد محادثات.</p>";
+}
 
-          let details = "";
+window.openChat = async function(id) {
+  selectedChat = id;
 
-          try {
-            if (error.context && typeof error.context.json === "function") {
-              const responseData = await error.context.json();
-              details = responseData.error || "";
-            }
-          } catch (_) {}
+  const { data: chat, error } = await client
+    .from("support_chats")
+    .select("*")
+    .eq("id", id)
+    .single();
 
-          setStatus(
-            "فشل التحقق من الرتبة." +
-            (details ? "\nالسبب: " + details : "") +
-            "\nافتح Console لمعرفة التفاصيل."
-          );
-          return;
-        }
+  if (error) {
+    alert("تعذر فتح المحادثة: " + error.message);
+    return;
+  }
 
-        console.log("bright-api response:", data);
+  if (!isStaff && chat.owner_id !== currentUser.id) {
+    alert("لا تملك صلاحية مشاهدة هذه المحادثة.");
+    return;
+  }
 
-        // bright-api يرجع allowed وليس success أو hasAccess
-        if (!data || typeof data.allowed !== "boolean") {
-          setStatus(
-            "استجابة bright-api غير متوقعة.\n" +
-            "افتح Console وانسخ نتيجة bright-api."
-          );
-          return;
-        }
+  const { data: messages, error: messageError } = await client
+    .from("chat_messages")
+    .select("*")
+    .eq("chat_id", id)
+    .order("created_at", { ascending: true });
 
-        const discordId = data.discordUserId || "غير متوفر";
+  if (messageError) {
+    alert("تعذر تحميل الرسائل: " + messageError.message);
+    return;
+  }
 
-        if (!data.allowed) {
-          verifiedUserId = user.id;
+  $("chatDetail").innerHTML = `
+    <div class="item">
+      <h3>${esc(chat.title)}</h3>
 
-          setStatus(
-            data.error === "Not a member of the Discord server"
-              ? "حسابك ليس عضوًا في سيرفر Discord المطلوب."
-              : "تم تسجيل الدخول، لكن حسابك لا يملك رتبة الدخول المطلوبة."
-          );
+      <div>
+        ${(messages || []).map(message => `
+          <div class="item">
+            <b>
+              ${message.sender_is_staff
+                ? "الإدارة"
+                : message.sender_id === currentUser.id
+                  ? "أنت"
+                  : "العضو"}:
+            </b>
+            <p>${esc(message.body)}</p>
+            <small>${date(message.created_at)}</small>
+          </div>
+        `).join("") || "<p>ابدأ المحادثة بإرسال رسالة.</p>"}
+      </div>
 
-          profileEl.textContent = "Discord ID: " + discordId;
-          profileEl.classList.remove("hidden");
-          return;
-        }
+      <form id="chatReply">
+        <textarea id="chatReplyBody" maxlength="4000" required placeholder="اكتب رسالتك"></textarea>
+        <button type="submit">إرسال</button>
+      </form>
+    </div>
+  `;
 
-        verifiedUserId = user.id;
+  $("chatReply").addEventListener("submit", async event => {
+    event.preventDefault();
 
-        setStatus("تم تسجيل الدخول والتحقق من رتبتك بنجاح!");
+    const body = $("chatReplyBody").value.trim();
+    if (!body) return;
 
-        profileEl.textContent =
-          "Discord ID: " + discordId +
-          (data.isStaff ? "\nرتبة المسؤولين: تم التحقق" : "");
-
-        profileEl.classList.remove("hidden");
-        memberArea.classList.remove("hidden");
-
-        if (data.isStaff) {
-          staffCard.classList.remove("hidden");
-        }
-
-      } catch (error) {
-        console.error("Verification error:", error);
-        setStatus("حدث خطأ أثناء التحقق:\n" + error.message);
-      } finally {
-        verificationInProgress = false;
-      }
-    }
-
-    async function initializeSite() {
-      setStatus("جارٍ فحص جلسة تسجيل الدخول...");
-
-      try {
-        const {
-          data: { session },
-          error
-        } = await supabaseClient.auth.getSession();
-
-        if (error) throw error;
-
-        if (session?.user) {
-          await verifyAccess(session.user);
-        } else {
-          setLoggedIn(false);
-          setStatus(
-            "لم يتم العثور على جلسة دخول. اضغط تسجيل الدخول بالديسكورد."
-          );
-        }
-      } catch (error) {
-        console.error("Session error:", error);
-        setStatus("تعذر استعادة جلسة الدخول: " + error.message);
-      }
-
-      supabaseClient.auth.onAuthStateChange((event, session) => {
-        if (event === "SIGNED_OUT") {
-          verifiedUserId = null;
-          setLoggedIn(false);
-          memberArea.classList.add("hidden");
-          profileEl.classList.add("hidden");
-          staffCard.classList.add("hidden");
-          setStatus("تم تسجيل الخروج.");
-          return;
-        }
-
-        if (event === "SIGNED_IN" && session?.user) {
-          verifiedUserId = null;
-          Promise.resolve().then(() => verifyAccess(session.user));
-        }
+    const { error: insertError } = await client
+      .from("chat_messages")
+      .insert({
+        chat_id: id,
+        sender_id: currentUser.id,
+        body,
+        sender_is_staff: isStaff
       });
+
+    if (insertError) {
+      alert("تعذر إرسال الرسالة: " + insertError.message);
+      return;
     }
 
-    loginBtn.addEventListener("click", loginDiscord);
-    mainLoginBtn.addEventListener("click", loginDiscord);
-    logoutBtn.addEventListener("click", logout);
+    await openChat(id);
+  });
+};
 
-    document.getElementById("serverBtn").addEventListener("click", () => {
-      window.open(DISCORD_SERVER_URL, "_blank", "noopener");
+$("chatForm").addEventListener("submit", async event => {
+  event.preventDefault();
+
+  if (!currentUser) {
+    alert("سجّل الدخول أولًا.");
+    return;
+  }
+
+  const title = $("chatTitle").value.trim();
+  if (!title) return;
+
+  const { data, error } = await client
+    .from("support_chats")
+    .insert({
+      owner_id: currentUser.id,
+      title
+    })
+    .select()
+    .single();
+
+  if (error) {
+    alert("تعذر بدء المحادثة: " + error.message);
+    return;
+  }
+
+  $("chatTitle").value = "";
+
+  await loadChats();
+  await openChat(data.id);
+});
+
+/* =========================
+   الفعاليات
+========================= */
+
+async function loadEvents() {
+  const { data, error } = await client
+    .from("events")
+    .select("*")
+    .order("starts_at", { ascending: true });
+
+  if (error) {
+    $("eventList").textContent = "تعذر تحميل الفعاليات: " + error.message;
+    throw error;
+  }
+
+  $("eventList").innerHTML = (data || []).map(event => `
+    <div class="item">
+      <h3>${esc(event.title)}</h3>
+      <p>${esc(event.description || "")}</p>
+      <p>
+        الموعد: ${date(event.starts_at)}
+        <br>
+        المسجلون: ${event.signup_count ?? 0}${event.capacity ? "/" + event.capacity : ""}
+      </p>
+      <button type="button" onclick="joinEvent('${event.id}')">التسجيل بالفعالية</button>
+      ${isStaff
+        ? `<button class="secondary" type="button" onclick="deleteItem('events','${event.id}')">حذف</button>`
+        : ""}
+    </div>
+  `).join("") || "<p>لا توجد فعاليات منشورة.</p>";
+}
+
+window.joinEvent = async function(id) {
+  const { error } = await client
+    .from("event_signups")
+    .insert({
+      event_id: id,
+      user_id: currentUser.id
     });
 
-    initializeSite();
-  </script>
+  if (error) {
+    alert(error.code === "23505" ? "أنت مسجل مسبقًا." : error.message);
+    return;
+  }
+
+  alert("تم تسجيلك بالفعالية.");
+  await loadEvents();
+};
+
+$("eventForm").addEventListener("submit", async event => {
+  event.preventDefault();
+
+  if (!isStaff) return;
+
+  const dateValue = $("eventDate").value;
+  if (!dateValue) return;
+
+  const { error } = await client
+    .from("events")
+    .insert({
+      title: $("eventTitle").value.trim(),
+      description: $("eventDescription").value.trim(),
+      starts_at: new Date(dateValue).toISOString(),
+      capacity: Number($("eventCapacity").value) || 0,
+      created_by: currentUser.id
+    });
+
+  if (error) {
+    alert("تعذر نشر الفعالية: " + error.message);
+    return;
+  }
+
+  event.target.reset();
+  await loadEvents();
+  alert("تم نشر الفعالية.");
+});
+
+/* =========================
+   إعلانات الرحلات
+========================= */
+
+async function loadTrips() {
+  const { data, error } = await client
+    .from("trips")
+    .select("*")
+    .order("departure_at", { ascending: true });
+
+  if (error) {
+    $("tripList").textContent = "تعذر تحميل الرحلات: " + error.message;
+    throw error;
+  }
+
+  $("tripList").innerHTML = (data || []).map(trip => `
+    <div class="item">
+      <h3>${esc(trip.title)}</h3>
+      <p>${esc(trip.description || "")}</p>
+      <p>
+        الموعد: ${date(trip.departure_at)}
+        <br>
+        المقاعد المحجوزة: ${trip.booking_count ?? 0}${trip.capacity ? "/" + trip.capacity : ""}
+      </p>
+      <button type="button" onclick="bookTrip('${trip.id}')">حجز مقعد</button>
+      ${isStaff
+        ? `<button class="secondary" type="button" onclick="deleteItem('trips','${trip.id}')">حذف</button>`
+        : ""}
+    </div>
+  `).join("") || "<p>لا توجد إعلانات رحلات.</p>";
+}
+
+window.bookTrip = async function(id) {
+  const { error } = await client
+    .from("trip_bookings")
+    .insert({
+      trip_id: id,
+      user_id: currentUser.id
+    });
+
+  if (error) {
+    alert(error.code === "23505" ? "سبق أن حجزت مقعدًا." : error.message);
+    return;
+  }
+
+  alert("تم تسجيل حجزك.");
+  await loadTrips();
+};
+
+window.deleteItem = async function(table, id) {
+  if (!isStaff || !confirm("متأكد من الحذف؟")) return;
+
+  const allowedTables = ["events", "trips"];
+  if (!allowedTables.includes(table)) return;
+
+  const { error } = await client
+    .from(table)
+    .delete()
+    .eq("id", id);
+
+  if (error) {
+    alert("تعذر الحذف: " + error.message);
+    return;
+  }
+
+  await refreshAll();
+};
+
+/* =========================
+   إدارة التذاكر
+========================= */
+
+async function loadAdminTickets() {
+  if (!isStaff) return;
+
+  const { data, error } = await client
+    .from("tickets")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    $("adminTickets").textContent = "تعذر تحميل التذاكر: " + error.message;
+    return;
+  }
+
+  $("adminTickets").innerHTML = (data || []).map(ticket => `
+    <div class="item">
+      <b>${esc(ticket.ticket_type === "complaint" ? "شكوى" : "دعم فني")}</b>
+      — ${esc(ticketStatus(ticket.status))}
+      <p>${esc(ticket.body || "")}</p>
+      <small>${date(ticket.created_at)}</small>
+      <br>
+      <button type="button" onclick="openTicket('${ticket.id}')">فتح</button>
+      ${ticket.status === "open"
+        ? `<button type="button" onclick="claimTicket('${ticket.id}')">استلام</button>`
+        : ""}
+      ${ticket.status !== "closed"
+        ? `<button class="secondary" type="button" onclick="closeTicket('${ticket.id}')">إغلاق</button>`
+        : ""}
+    </div>
+  `).join("") || "<p>لا توجد تذاكر.</p>";
+};
+
+/* =========================
+   التنقل وتسجيل الدخول
+========================= */
+
+document.querySelectorAll("[data-page]").forEach(button => {
+  button.addEventListener("click", () => {
+    if (button.dataset.page === "admin" && !isStaff) return;
+
+    document.querySelectorAll(".page").forEach(page => {
+      page.classList.add("hidden");
+    });
+
+    $(button.dataset.page).classList.remove("hidden");
+
+    document.querySelectorAll("[data-page]").forEach(navButton => {
+      navButton.classList.toggle("active", navButton === button);
+    });
+  });
+});
+
+$("login").onclick = signIn;
+
+$("logout").onclick = async () => {
+  await client.auth.signOut();
+  location.reload();
+};
+
+async function init() {
+  try {
+    const { data, error } = await client.auth.getSession();
+
+    if (error) throw error;
+
+    if (data.session?.user) {
+      currentUser = data.session.user;
+      await checkRole();
+    } else {
+      showApp(false);
+      status("سجّل دخولك بحساب Discord للمتابعة.");
+    }
+  } catch (error) {
+    console.error(error);
+    status("خطأ: " + error.message);
+  }
+}
+
+client.auth.onAuthStateChange((event, session) => {
+  if (event === "SIGNED_IN" && session?.user) {
+    currentUser = session.user;
+    setTimeout(() => checkRole(), 0);
+  }
+
+  if (event === "SIGNED_OUT") {
+    currentUser = null;
+    isStaff = false;
+    showApp(false);
+    status("تم تسجيل الخروج.");
+  }
+});
+
+init();
+</script>
 </body>
 </html>
