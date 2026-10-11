@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>RUSSIA | SERVICES</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
@@ -28,7 +28,7 @@ textarea{min-height:90px;resize:vertical}
 .nav button{background:#292930}
 .nav button.active{background:var(--red)}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
-.item{padding:15px;border:1px solid var(--line);border-radius:12px;margin:10px 0;background:#101015;overflow-wrap:anywhere}
+.item{padding:15px;border:1px solid var(--line);border-radius:12px;margin:10px 0;background:#101015}
 .status{white-space:pre-wrap;overflow-wrap:anywhere;background:#202027;border-radius:9px;padding:13px;line-height:1.8;margin-top:12px}
 small,.muted{color:var(--muted)}
 .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
@@ -48,99 +48,103 @@ footer{text-align:center;padding:24px;color:#888}
 </header>
 
 <main>
-  <section class="panel">
-    <h1>مركز الخدمات <span>🇷🇺</span></h1>
-    <p>التذاكر · المحادثات · الفعاليات · إعلانات الرحلات</p>
-    <div id="status" class="status">جارٍ تجهيز الموقع...</div>
+<section class="panel">
+  <h1>مركز الخدمات <span>🇷🇺</span></h1>
+  <p>التذاكر · المحادثات · الفعاليات · إعلانات الرحلات</p>
+  <div id="status" class="status">جارٍ تجهيز الموقع...</div>
+</section>
+
+<div id="app" class="hidden">
+  <div class="nav">
+    <button data-page="tickets" class="active">🎫 التذاكر</button>
+    <button data-page="chat">💬 المحادثات</button>
+    <button data-page="events">🏆 الفعاليات</button>
+    <button data-page="trips">🛫 إعلانات الرحلات</button>
+    <button data-page="admin" id="adminNav" class="hidden">🛡️ الإدارة</button>
+  </div>
+
+  <section id="tickets" class="panel page">
+    <h2>🎫 التذاكر</h2>
+    <p>اختر نوع التذكرة واكتب التفاصيل. تظهر ردود الإدارة داخل التذكرة ويمكنك الرد عليها.</p>
+
+    <form id="ticketForm">
+      <label>نوع التذكرة</label>
+      <select id="ticketType" required>
+        <option value="technical">دعم فني</option>
+        <option value="complaint">شكوى</option>
+      </select>
+      <label>التفاصيل</label>
+      <textarea id="ticketBody" maxlength="4000" required placeholder="اشرح طلبك..."></textarea>
+      <button>فتح تذكرة</button>
+    </form>
+
+    <h3>تذاكري</h3>
+    <div id="ticketList"></div>
+    <div id="ticketDetail"></div>
   </section>
 
-  <div id="app" class="hidden">
-    <div class="nav">
-      <button data-page="tickets" class="active">🎫 التذاكر</button>
-      <button data-page="chat">💬 المحادثات</button>
-      <button data-page="events">🏆 الفعاليات</button>
-      <button data-page="trips">🛫 إعلانات الرحلات</button>
-      <button data-page="admin" id="adminNav" class="hidden">🛡️ الإدارة</button>
+  <section id="chat" class="panel page hidden">
+    <h2>💬 محادثات الدعم</h2>
+    <p>المحادثات مفتوحة لجميع الأعضاء المسجلين؛ لا تشارك معلومات خاصة.</p>
+
+    <form id="chatForm">
+      <label>موضوع المحادثة</label>
+      <input id="chatTitle" maxlength="120" required>
+      <button>بدء محادثة</button>
+    </form>
+
+    <div id="chatList"></div>
+    <div id="chatDetail"></div>
+  </section>
+
+  <section id="events" class="panel page hidden">
+    <h2>🏆 الفعاليات</h2>
+    <div id="eventList"></div>
+
+    <div id="eventAdminForm" class="hidden">
+      <h3>إنشاء فعالية (الإدارة)</h3>
+      <form id="eventForm">
+        <label>اسم الفعالية</label>
+        <input id="eventTitle" maxlength="120" required>
+        <label>الوصف</label>
+        <textarea id="eventDescription" maxlength="4000"></textarea>
+        <label>الموعد</label>
+        <input id="eventDate" type="datetime-local" required>
+        <label>عدد المقاعد (0 = بلا حد)</label>
+        <input id="eventCapacity" type="number" min="0" max="10000" value="0">
+        <button>نشر الفعالية</button>
+      </form>
     </div>
+  </section>
 
-    <section id="tickets" class="panel page">
-      <h2>🎫 التذاكر</h2>
-      <p>اختر نوع التذكرة واكتب التفاصيل. تظهر ردود الإدارة داخل التذكرة ويمكنك الرد عليها.</p>
+  <section id="trips" class="panel page hidden">
+    <h2>🛫 إعلانات الرحلات</h2>
+    <div id="tripList"></div>
 
-      <form id="ticketForm">
-        <label>نوع التذكرة</label>
-        <select id="ticketType" required>
-          <option value="technical">دعم فني</option>
-          <option value="complaint">شكوى</option>
-        </select>
-        <label>التفاصيل</label>
-        <textarea id="ticketBody" maxlength="4000" required placeholder="اشرح طلبك..."></textarea>
-        <button type="submit">فتح تذكرة</button>
+    <div id="tripAdminForm" class="hidden">
+      <h3>إعلان رحلة (الإدارة)</h3>
+      <form id="tripForm">
+        <label>عنوان الرحلة</label>
+        <input id="tripTitle" maxlength="120" required>
+        <label>الوجهة / التفاصيل</label>
+        <textarea id="tripDescription" maxlength="4000" required></textarea>
+        <label>موعد الرحلة</label>
+        <input id="tripDate" type="datetime-local" required>
+        <label>عدد المقاعد (0 = بلا حد)</label>
+        <input id="tripCapacity" type="number" min="0" max="10000" value="0">
+        <button>نشر الرحلة</button>
       </form>
+    </div>
+  </section>
 
-      <h3>تذاكري</h3>
-      <div id="ticketList"></div>
-      <div id="ticketDetail"></div>
-    </section>
-
-    <section id="chat" class="panel page hidden">
-      <h2>💬 محادثات الدعم</h2>
-      <p>أنشئ محادثة دعم؛ لا يستطيع المستخدم رؤية محادثات الآخرين.</p>
-      <form id="chatForm">
-        <label>موضوع المحادثة</label>
-        <input id="chatTitle" maxlength="120" required>
-        <button type="submit">بدء محادثة</button>
-      </form>
-      <div id="chatList"></div>
-      <div id="chatDetail"></div>
-    </section>
-
-    <section id="events" class="panel page hidden">
-      <h2>🏆 الفعاليات</h2>
-      <div id="eventList"></div>
-      <div id="eventAdminForm" class="hidden">
-        <h3>إنشاء فعالية (الإدارة)</h3>
-        <form id="eventForm">
-          <label>اسم الفعالية</label>
-          <input id="eventTitle" maxlength="120" required>
-          <label>الوصف</label>
-          <textarea id="eventDescription" maxlength="4000"></textarea>
-          <label>الموعد</label>
-          <input id="eventDate" type="datetime-local" required>
-          <label>عدد المقاعد (0 = بلا حد)</label>
-          <input id="eventCapacity" type="number" min="0" max="10000" value="0">
-          <button type="submit">نشر الفعالية</button>
-        </form>
-      </div>
-    </section>
-
-    <section id="trips" class="panel page hidden">
-      <h2>🛫 إعلانات الرحلات</h2>
-      <div id="tripList"></div>
-      <div id="tripAdminForm" class="hidden">
-        <h3>إعلان رحلة (الإدارة)</h3>
-        <form id="tripForm">
-          <label>عنوان الرحلة</label>
-          <input id="tripTitle" maxlength="120" required>
-          <label>الوجهة / التفاصيل</label>
-          <textarea id="tripDescription" maxlength="4000" required></textarea>
-          <label>موعد الرحلة</label>
-          <input id="tripDate" type="datetime-local" required>
-          <label>عدد المقاعد (0 = بلا حد)</label>
-          <input id="tripCapacity" type="number" min="0" max="10000" value="0">
-          <button type="submit">نشر الرحلة</button>
-        </form>
-      </div>
-    </section>
-
-    <section id="admin" class="panel page hidden">
-      <h2>🛡️ لوحة الإدارة</h2>
-      <p>صلاحيات لوحة الإدارة تؤخذ من التحقق في bright-api ومن جدول site_staff في قاعدة البيانات.</p>
-      <p>يمكن إدارة الفعاليات والرحلات من الأقسام المخصصة لها.</p>
-      <h3>إدارة التذاكر المفتوحة</h3>
-      <div id="adminTickets"></div>
-    </section>
-  </div>
+  <section id="admin" class="panel page hidden">
+    <h2>🛡️ لوحة الإدارة</h2>
+    <p>صلاحيات لوحة الإدارة تؤخذ من التحقق الآمن في bright-api ومن جدول site_staff في قاعدة البيانات.</p>
+    <p>يمكن إدارة الفعاليات والرحلات من الأقسام المخصصة لها.</p>
+    <h3>إدارة التذاكر المفتوحة</h3>
+    <div id="adminTickets"></div>
+  </section>
+</div>
 </main>
 
 <footer>RUSSIA SERVICES</footer>
@@ -149,7 +153,6 @@ footer{text-align:center;padding:24px;color:#888}
 const SUPABASE_URL = "https://hivbjjtdxezftpewovhy.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_yalLdE_KrroBxB-XaiI1aA_9__jfaKb";
 const SITE_URL = "https://m100d200m-cloud.github.io/my-discord-site/";
-const DISCORD_SERVER_URL = "https://discord.com/channels/1531735994942886030";
 
 const $ = id => document.getElementById(id);
 
@@ -168,25 +171,26 @@ const client = window.supabase.createClient(
 
 let currentUser = null;
 let isStaff = false;
+let canManageTrips = false;
 let selectedTicket = null;
 let selectedChat = null;
 
-function status(message) {
-  $("status").textContent = message;
+function status(s) {
+  $("status").textContent = s;
 }
 
-function esc(value) {
-  return String(value ?? "").replace(/[&<>"']/g, char => ({
+function esc(s) {
+  return String(s ?? "").replace(/[&<>"']/g, c => ({
     "&": "&amp;",
     "<": "&lt;",
     ">": "&gt;",
     '"': "&quot;",
     "'": "&#39;"
-  })[char]);
+  }[c]));
 }
 
-function date(value) {
-  return value ? new Date(value).toLocaleString("ar-SA") : "غير محدد";
+function date(s) {
+  return s ? new Date(s).toLocaleString("ar-SA") : "غير محدد";
 }
 
 function showApp(on) {
@@ -199,53 +203,47 @@ async function api(path, body = {}) {
   const { data: { session } } = await client.auth.getSession();
 
   if (!session?.access_token) {
-    throw new Error("سجّل الدخول أولًا.");
+    throw new Error("انتهت جلسة تسجيل الدخول. سجّل الدخول مرة أخرى.");
   }
 
-  const response = await fetch(
-    SUPABASE_URL + "/functions/v1/bright-api",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "apikey": SUPABASE_PUBLISHABLE_KEY,
-        "Authorization": "Bearer " + session.access_token
-      },
-      body: JSON.stringify({
-        action: path,
-        ...body
-      })
-    }
-  );
+  const r = await fetch(SUPABASE_URL + "/functions/v1/bright-api", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "apikey": SUPABASE_PUBLISHABLE_KEY,
+      "Authorization": "Bearer " + session.access_token
+    },
+    body: JSON.stringify({ action: path, ...body })
+  });
 
-  const result = await response.json().catch(() => ({}));
+  const d = await r.json().catch(() => ({}));
 
-  if (!response.ok) {
-    throw new Error(result.error || "تعذر تنفيذ الطلب");
+  if (!r.ok) {
+    throw new Error(d.error || "تعذر تنفيذ الطلب");
   }
 
-  return result;
+  return d;
 }
 
 async function checkRole() {
   try {
-    const result = await api("verify", {});
+    const d = await api("verify", {});
 
-    isStaff = !!(result.isStaff || result.is_staff);
+    isStaff = !!(d.isStaff || d.is_staff);
+    canManageTrips = !!d.canManageTrips;
 
     $("adminNav").classList.toggle("hidden", !isStaff);
     $("eventAdminForm").classList.toggle("hidden", !isStaff);
-    $("tripAdminForm").classList.toggle("hidden", !isStaff);
+    $("tripAdminForm").classList.toggle("hidden", !canManageTrips);
 
     $("who").textContent = currentUser.email || "تم تسجيل الدخول";
-
     status("تم تسجيل الدخول والتحقق من رتبتك بنجاح.");
-    showApp(true);
 
+    showApp(true);
     await refreshAll();
-  } catch (error) {
-    console.error(error);
-    status("تعذر التحقق من الرتبة: " + error.message);
+  } catch (e) {
+    console.error(e);
+    status("تعذر التحقق من الرتبة: " + e.message);
     showApp(false);
   }
 }
@@ -265,32 +263,24 @@ async function signIn() {
 }
 
 async function refreshAll() {
-  const results = await Promise.allSettled([
+  await Promise.allSettled([
     loadTickets(),
     loadChats(),
     loadEvents(),
     loadTrips(),
     loadAdminTickets()
   ]);
-
-  results.forEach(result => {
-    if (result.status === "rejected") {
-      console.error(result.reason);
-    }
-  });
 }
 
-function ticketStatus(value) {
-  return {
+function ticketStatus(s) {
+  return ({
     open: "🟢 مفتوحة",
     claimed: "🟡 مستلمة من الإدارة",
     closed: "🔴 مغلقة"
-  }[value] || value;
+  })[s] || s;
 }
 
-/* =========================
-   التذاكر
-========================= */
+/* التذاكر */
 
 async function loadTickets() {
   const { data, error } = await client
@@ -298,138 +288,107 @@ async function loadTickets() {
     .select("*")
     .order("created_at", { ascending: false });
 
-  if (error) {
-    $("ticketList").textContent = "تعذر تحميل التذاكر: " + error.message;
-    throw error;
-  }
+  if (error) throw error;
 
-  const ownTickets = (data || []).filter(ticket =>
-    isStaff || ticket.owner_id === currentUser.id
+  const own = (data || []).filter(t =>
+    isStaff || t.owner_id === currentUser.id
   );
 
-  $("ticketList").innerHTML = ownTickets.map(ticket => `
+  $("ticketList").innerHTML = own.map(t => `
     <div class="item">
-      <b>${esc(ticket.ticket_type === "complaint" ? "شكوى" : "دعم فني")}</b>
-      <span class="badge">${esc(ticketStatus(ticket.status))}</span>
-      <p>${esc(ticket.body || "")}</p>
-      <small>${date(ticket.created_at)}</small>
+      <b>${esc(t.ticket_type === "complaint" ? "شكوى" : "دعم فني")}</b>
+      <span class="badge">${ticketStatus(t.status)}</span>
+      <p>${esc(t.body || "")}</p>
+      <small>${date(t.created_at)}</small>
       <br>
-      <button type="button" onclick="openTicket('${ticket.id}')">
-        فتح التذكرة
-      </button>
+      <button onclick="openTicket('${t.id}')">فتح التذكرة</button>
     </div>
   `).join("") || "<p>لا توجد تذاكر حتى الآن.</p>";
 }
 
-window.openTicket = async function(id) {
+window.openTicket = async id => {
   selectedTicket = id;
 
-  const { data: ticket, error } = await client
+  const { data: t, error } = await client
     .from("tickets")
     .select("*")
     .eq("id", id)
     .single();
 
-  if (error) {
-    alert("تعذر فتح التذكرة: " + error.message);
-    return;
+  if (error) return alert(error.message);
+
+  if (!isStaff && t.owner_id !== currentUser.id) {
+    return alert("لا تملك صلاحية مشاهدة هذه التذكرة");
   }
 
-  if (!isStaff && ticket.owner_id !== currentUser.id) {
-    alert("لا تملك صلاحية مشاهدة هذه التذكرة.");
-    return;
-  }
-
-  const { data: messages, error: messageError } = await client
+  const { data: m, error: me } = await client
     .from("ticket_messages")
     .select("*")
     .eq("ticket_id", id)
-    .order("created_at", { ascending: true });
+    .order("created_at");
 
-  if (messageError) {
-    alert("تعذر تحميل الردود: " + messageError.message);
-    return;
-  }
+  if (me) return alert(me.message);
 
-  const canReply = ticket.status !== "closed";
+  const canReply = t.status !== "closed";
 
   $("ticketDetail").innerHTML = `
     <div class="item">
-      <h3>${esc(ticket.ticket_type === "complaint" ? "شكوى" : "دعم فني")}</h3>
-      <span class="badge">${esc(ticketStatus(ticket.status))}</span>
-      <p>${esc(ticket.body || "")}</p>
-
-      <h3>المحادثة</h3>
+      <h3>${esc(t.ticket_type === "complaint" ? "شكوى" : "دعم فني")}</h3>
+      <span class="badge">${ticketStatus(t.status)}</span>
+      <p>${esc(t.body || "")}</p>
 
       <div id="ticketMessages">
-        ${(messages || []).map(message => `
+        ${(m || []).map(x => `
           <div class="item">
-            <b>
-              ${message.sender_is_staff
-                ? "الإدارة"
-                : message.sender_id === currentUser.id
-                  ? "أنت"
-                  : "العضو"}:
-            </b>
-            <p>${esc(message.body)}</p>
-            <small>${date(message.created_at)}</small>
+            <b>${x.sender_is_staff ? "الإدارة" : (x.sender_id === currentUser.id ? "أنت" : "العضو")}:</b>
+            <p>${esc(x.body)}</p>
+            <small>${date(x.created_at)}</small>
           </div>
-        `).join("") || "<p>لا توجد ردود حتى الآن.</p>"}
+        `).join("")}
       </div>
 
-      ${isStaff && ticket.status === "open"
-        ? `<button type="button" onclick="claimTicket('${id}')">استلام التذكرة</button>`
+      ${isStaff && t.status === "open"
+        ? `<button onclick="claimTicket('${id}')">استلام التذكرة</button>`
         : ""}
 
-      ${canReply ? `
-        <form id="ticketReply">
-          <label>اكتب ردك</label>
-          <textarea id="ticketReplyBody" maxlength="4000" required placeholder="اكتب رسالتك هنا..."></textarea>
-          <button type="submit">إرسال الرد</button>
-        </form>
-      ` : "<p>التذكرة مغلقة ولا يمكن الرد عليها.</p>"}
+      ${canReply
+        ? `<form id="ticketReply">
+             <textarea id="ticketReplyBody" maxlength="4000" required placeholder="اكتب ردك"></textarea>
+             <button>إرسال الرد</button>
+           </form>`
+        : "<p>التذكرة مغلقة ولا يمكن الرد عليها.</p>"}
 
-      ${isStaff && ticket.status !== "closed"
-        ? `<button class="secondary" type="button" onclick="closeTicket('${id}')">إغلاق التذكرة</button>`
+      ${isStaff && t.status !== "closed"
+        ? `<button class="secondary" onclick="closeTicket('${id}')">إغلاق التذكرة</button>`
         : ""}
     </div>
   `;
 
-  const replyForm = $("ticketReply");
+  $("ticketReply")?.addEventListener("submit", async e => {
+    e.preventDefault();
 
-  if (replyForm) {
-    replyForm.addEventListener("submit", async event => {
-      event.preventDefault();
+    const body = $("ticketReplyBody").value.trim();
+    if (!body) return;
 
-      const body = $("ticketReplyBody").value.trim();
-      if (!body) return;
-
-      const { error: insertError } = await client
-        .from("ticket_messages")
-        .insert({
-          ticket_id: id,
-          sender_id: currentUser.id,
-          body,
-          sender_is_staff: isStaff
-        });
-
-      if (insertError) {
-        alert("تعذر إرسال الرد: " + insertError.message);
-        return;
-      }
-
-      await openTicket(id);
-      await loadTickets();
-      await loadAdminTickets();
+    const r = await client.from("ticket_messages").insert({
+      ticket_id: id,
+      sender_id: currentUser.id,
+      body,
+      sender_is_staff: isStaff
     });
-  }
+
+    if (r.error) {
+      return alert("تعذر إرسال الرد: " + r.error.message);
+    }
+
+    await openTicket(id);
+    await loadTickets();
+    await loadAdminTickets();
+  });
 };
 
-window.claimTicket = async function(id) {
-  if (!isStaff) {
-    alert("الإدارة فقط تستطيع استلام التذاكر.");
-    return;
-  }
+window.claimTicket = async id => {
+  if (!isStaff) return alert("الإدارة فقط تستطيع استلام التذاكر");
 
   const { error } = await client
     .from("tickets")
@@ -440,23 +399,15 @@ window.claimTicket = async function(id) {
     .eq("id", id)
     .eq("status", "open");
 
-  if (error) {
-    alert("تعذر استلام التذكرة: " + error.message);
-    return;
-  }
+  if (error) return alert("تعذر استلام التذكرة: " + error.message);
 
   await loadTickets();
   await loadAdminTickets();
   await openTicket(id);
 };
 
-window.closeTicket = async function(id) {
-  if (!isStaff) {
-    alert("الإدارة فقط تستطيع إغلاق التذاكر.");
-    return;
-  }
-
-  if (!confirm("هل تريد إغلاق هذه التذكرة؟")) return;
+window.closeTicket = async id => {
+  if (!isStaff) return alert("الإدارة فقط تستطيع إغلاق التذاكر");
 
   const { error } = await client
     .from("tickets")
@@ -465,62 +416,45 @@ window.closeTicket = async function(id) {
 
   if (error) {
     alert("تعذر إغلاق التذكرة: " + error.message);
-    return;
+  } else {
+    await loadTickets();
+    await loadAdminTickets();
+    await openTicket(id);
   }
-
-  await loadTickets();
-  await loadAdminTickets();
-  await openTicket(id);
 };
 
-$("ticketForm").addEventListener("submit", async event => {
-  event.preventDefault();
-
-  if (!currentUser) {
-    alert("سجّل الدخول أولًا.");
-    return;
-  }
+$("ticketForm").addEventListener("submit", async e => {
+  e.preventDefault();
 
   const type = $("ticketType").value;
   const body = $("ticketBody").value.trim();
 
   if (!body) return;
 
-  const submitButton = $("ticketForm").querySelector("button");
-  submitButton.disabled = true;
+  const { data, error } = await client
+    .from("tickets")
+    .insert({
+      owner_id: currentUser.id,
+      title: type === "complaint" ? "شكوى" : "دعم فني",
+      ticket_type: type,
+      body
+    })
+    .select()
+    .single();
 
-  try {
-    const { data, error } = await client
-      .from("tickets")
-      .insert({
-        owner_id: currentUser.id,
-        title: type === "complaint" ? "شكوى" : "دعم فني",
-        ticket_type: type,
-        body
-      })
-      .select()
-      .single();
-
-    if (error) {
-      throw error;
-    }
-
-    $("ticketBody").value = "";
-
-    await loadTickets();
-    await openTicket(data.id);
-
-    alert("تم فتح التذكرة بنجاح.");
-  } catch (error) {
-    alert("تعذر فتح التذكرة: " + error.message);
-  } finally {
-    submitButton.disabled = false;
+  if (error) {
+    return alert(
+      "تعذر فتح التذكرة: " + error.message +
+      " — تأكد من تشغيل تحديث schema.sql في Supabase."
+    );
   }
+
+  $("ticketBody").value = "";
+  await loadTickets();
+  openTicket(data.id);
 });
 
-/* =========================
-   المحادثات
-========================= */
+/* المحادثات */
 
 async function loadChats() {
   const { data, error } = await client
@@ -528,270 +462,186 @@ async function loadChats() {
     .select("*")
     .order("created_at", { ascending: false });
 
-  if (error) {
-    $("chatList").textContent = "تعذر تحميل المحادثات: " + error.message;
-    throw error;
-  }
+  if (error) throw error;
 
-  const ownChats = (data || []).filter(chat =>
-    isStaff || chat.owner_id === currentUser.id
-  );
-
-  $("chatList").innerHTML = ownChats.map(chat => `
+  $("chatList").innerHTML = (data || []).map(c => `
     <div class="item">
-      <b>${esc(chat.title)}</b>
-      <span class="badge">${esc(chat.status || "مفتوحة")}</span>
+      <b>${esc(c.title)}</b>
+      <span class="badge">${esc(c.status)}</span>
       <br>
-      <small>${date(chat.created_at)}</small>
+      <small>${date(c.created_at)}</small>
       <br>
-      <button type="button" onclick="openChat('${chat.id}')">فتح المحادثة</button>
+      <button onclick="openChat('${c.id}')">فتح المحادثة</button>
     </div>
   `).join("") || "<p>لا توجد محادثات.</p>";
 }
 
-window.openChat = async function(id) {
+window.openChat = async id => {
   selectedChat = id;
 
-  const { data: chat, error } = await client
+  const { data: c, error } = await client
     .from("support_chats")
     .select("*")
     .eq("id", id)
     .single();
 
-  if (error) {
-    alert("تعذر فتح المحادثة: " + error.message);
-    return;
-  }
+  if (error) return alert(error.message);
 
-  if (!isStaff && chat.owner_id !== currentUser.id) {
-    alert("لا تملك صلاحية مشاهدة هذه المحادثة.");
-    return;
-  }
-
-  const { data: messages, error: messageError } = await client
+  const { data: m, error: me } = await client
     .from("chat_messages")
     .select("*")
     .eq("chat_id", id)
-    .order("created_at", { ascending: true });
+    .order("created_at");
 
-  if (messageError) {
-    alert("تعذر تحميل الرسائل: " + messageError.message);
-    return;
-  }
+  if (me) return alert(me.message);
 
   $("chatDetail").innerHTML = `
     <div class="item">
-      <h3>${esc(chat.title)}</h3>
-
+      <h3>${esc(c.title)}</h3>
       <div>
-        ${(messages || []).map(message => `
-          <div class="item">
-            <b>
-              ${message.sender_is_staff
-                ? "الإدارة"
-                : message.sender_id === currentUser.id
-                  ? "أنت"
-                  : "العضو"}:
-            </b>
-            <p>${esc(message.body)}</p>
-            <small>${date(message.created_at)}</small>
-          </div>
-        `).join("") || "<p>ابدأ المحادثة بإرسال رسالة.</p>"}
+        ${(m || []).map(x => `
+          <p>
+            <b>${x.sender_id === currentUser.id
+              ? "أنت"
+              : (x.sender_is_staff ? "الإدارة" : "العضو")}:</b>
+            ${esc(x.body)}
+            <small>${date(x.created_at)}</small>
+          </p>
+        `).join("")}
       </div>
 
       <form id="chatReply">
         <textarea id="chatReplyBody" maxlength="4000" required placeholder="اكتب رسالتك"></textarea>
-        <button type="submit">إرسال</button>
+        <button>إرسال</button>
       </form>
     </div>
   `;
 
-  $("chatReply").addEventListener("submit", async event => {
-    event.preventDefault();
+  $("chatReply").addEventListener("submit", async e => {
+    e.preventDefault();
 
     const body = $("chatReplyBody").value.trim();
     if (!body) return;
 
-    const { error: insertError } = await client
-      .from("chat_messages")
-      .insert({
-        chat_id: id,
-        sender_id: currentUser.id,
-        body,
-        sender_is_staff: isStaff
-      });
+    const r = await client.from("chat_messages").insert({
+      chat_id: id,
+      sender_id: currentUser.id,
+      body
+    });
 
-    if (insertError) {
-      alert("تعذر إرسال الرسالة: " + insertError.message);
-      return;
-    }
+    if (r.error) return alert(r.error.message);
 
-    await openChat(id);
+    openChat(id);
   });
 };
 
-$("chatForm").addEventListener("submit", async event => {
-  event.preventDefault();
-
-  if (!currentUser) {
-    alert("سجّل الدخول أولًا.");
-    return;
-  }
-
-  const title = $("chatTitle").value.trim();
-  if (!title) return;
+$("chatForm").addEventListener("submit", async e => {
+  e.preventDefault();
 
   const { data, error } = await client
     .from("support_chats")
     .insert({
       owner_id: currentUser.id,
-      title
+      title: $("chatTitle").value.trim()
     })
     .select()
     .single();
 
   if (error) {
-    alert("تعذر بدء المحادثة: " + error.message);
-    return;
+    return alert("تعذر بدء المحادثة: " + error.message);
   }
 
   $("chatTitle").value = "";
-
   await loadChats();
-  await openChat(data.id);
+  openChat(data.id);
 });
 
-/* =========================
-   الفعاليات
-========================= */
+/* الفعاليات */
 
 async function loadEvents() {
   const { data, error } = await client
     .from("events")
     .select("*")
-    .order("starts_at", { ascending: true });
+    .order("starts_at");
 
-  if (error) {
-    $("eventList").textContent = "تعذر تحميل الفعاليات: " + error.message;
-    throw error;
-  }
+  if (error) throw error;
 
-  $("eventList").innerHTML = (data || []).map(event => `
+  $("eventList").innerHTML = (data || []).map(x => `
     <div class="item">
-      <h3>${esc(event.title)}</h3>
-      <p>${esc(event.description || "")}</p>
+      <h3>${esc(x.title)}</h3>
+      <p>${esc(x.description || "")}</p>
       <p>
-        الموعد: ${date(event.starts_at)}
-        <br>
-        المسجلون: ${event.signup_count ?? 0}${event.capacity ? "/" + event.capacity : ""}
+        الموعد: ${date(x.starts_at)}<br>
+        المسجلون: ${x.signup_count ?? 0}${x.capacity ? "/" + x.capacity : ""}
       </p>
-      <button type="button" onclick="joinEvent('${event.id}')">التسجيل بالفعالية</button>
+      <button onclick="joinEvent('${x.id}')">التسجيل بالفعالية</button>
       ${isStaff
-        ? `<button class="secondary" type="button" onclick="deleteItem('events','${event.id}')">حذف</button>`
+        ? `<button class="secondary" onclick="deleteItem('events','${x.id}')">حذف</button>`
         : ""}
     </div>
   `).join("") || "<p>لا توجد فعاليات منشورة.</p>";
 }
 
-window.joinEvent = async function(id) {
-  const { error } = await client
-    .from("event_signups")
-    .insert({
-      event_id: id,
-      user_id: currentUser.id
-    });
+window.joinEvent = async id => {
+  const { error } = await client.from("event_signups").insert({
+    event_id: id,
+    user_id: currentUser.id
+  });
 
   if (error) {
     alert(error.code === "23505" ? "أنت مسجل مسبقًا." : error.message);
-    return;
+  } else {
+    alert("تم تسجيلك بالفعالية.");
   }
 
-  alert("تم تسجيلك بالفعالية.");
-  await loadEvents();
+  loadEvents();
 };
 
-$("eventForm").addEventListener("submit", async event => {
-  event.preventDefault();
-
-  if (!isStaff) return;
-
-  const dateValue = $("eventDate").value;
-  if (!dateValue) return;
-
-  const { error } = await client
-    .from("events")
-    .insert({
-      title: $("eventTitle").value.trim(),
-      description: $("eventDescription").value.trim(),
-      starts_at: new Date(dateValue).toISOString(),
-      capacity: Number($("eventCapacity").value) || 0,
-      created_by: currentUser.id
-    });
-
-  if (error) {
-    alert("تعذر نشر الفعالية: " + error.message);
-    return;
-  }
-
-  event.target.reset();
-  await loadEvents();
-  alert("تم نشر الفعالية.");
-});
-
-/* =========================
-   إعلانات الرحلات
-========================= */
+/* الرحلات */
 
 async function loadTrips() {
   const { data, error } = await client
     .from("trips")
     .select("*")
-    .order("departure_at", { ascending: true });
+    .order("departure_at");
 
-  if (error) {
-    $("tripList").textContent = "تعذر تحميل الرحلات: " + error.message;
-    throw error;
-  }
+  if (error) throw error;
 
-  $("tripList").innerHTML = (data || []).map(trip => `
+  $("tripList").innerHTML = (data || []).map(x => `
     <div class="item">
-      <h3>${esc(trip.title)}</h3>
-      <p>${esc(trip.description || "")}</p>
+      <h3>${esc(x.title)}</h3>
+      <p>${esc(x.description)}</p>
       <p>
-        الموعد: ${date(trip.departure_at)}
-        <br>
-        المقاعد المحجوزة: ${trip.booking_count ?? 0}${trip.capacity ? "/" + trip.capacity : ""}
+        الموعد: ${date(x.departure_at)}<br>
+        المقاعد المحجوزة: ${x.booking_count ?? 0}${x.capacity ? "/" + x.capacity : ""}
       </p>
-      <button type="button" onclick="bookTrip('${trip.id}')">حجز مقعد</button>
-      ${isStaff
-        ? `<button class="secondary" type="button" onclick="deleteItem('trips','${trip.id}')">حذف</button>`
+      <button onclick="bookTrip('${x.id}')">حجز مقعد</button>
+      ${canManageTrips
+        ? `<button class="secondary" onclick="deleteItem('trips','${x.id}')">حذف</button>`
         : ""}
     </div>
   `).join("") || "<p>لا توجد إعلانات رحلات.</p>";
 }
 
-window.bookTrip = async function(id) {
-  const { error } = await client
-    .from("trip_bookings")
-    .insert({
-      trip_id: id,
-      user_id: currentUser.id
-    });
+window.bookTrip = async id => {
+  const { error } = await client.from("trip_bookings").insert({
+    trip_id: id,
+    user_id: currentUser.id
+  });
 
   if (error) {
     alert(error.code === "23505" ? "سبق أن حجزت مقعدًا." : error.message);
-    return;
+  } else {
+    alert("تم تسجيل حجزك.");
   }
 
-  alert("تم تسجيل حجزك.");
-  await loadTrips();
+  loadTrips();
 };
 
-window.deleteItem = async function(table, id) {
-  if (!isStaff || !confirm("متأكد من الحذف؟")) return;
+window.deleteItem = async (table, id) => {
+  const allowed = table === "trips" ? canManageTrips : isStaff;
 
-  const allowedTables = ["events", "trips"];
-  if (!allowedTables.includes(table)) return;
+  if (!allowed || !confirm("متأكد من الحذف؟")) return;
 
   const { error } = await client
     .from(table)
@@ -799,16 +649,14 @@ window.deleteItem = async function(table, id) {
     .eq("id", id);
 
   if (error) {
-    alert("تعذر الحذف: " + error.message);
+    alert(error.message);
     return;
   }
 
   await refreshAll();
 };
 
-/* =========================
-   إدارة التذاكر
-========================= */
+/* لوحة الإدارة */
 
 async function loadAdminTickets() {
   if (!isStaff) return;
@@ -823,43 +671,85 @@ async function loadAdminTickets() {
     return;
   }
 
-  $("adminTickets").innerHTML = (data || []).map(ticket => `
+  $("adminTickets").innerHTML = (data || []).map(t => `
     <div class="item">
-      <b>${esc(ticket.ticket_type === "complaint" ? "شكوى" : "دعم فني")}</b>
-      — ${esc(ticketStatus(ticket.status))}
-      <p>${esc(ticket.body || "")}</p>
-      <small>${date(ticket.created_at)}</small>
-      <br>
-      <button type="button" onclick="openTicket('${ticket.id}')">فتح</button>
-      ${ticket.status === "open"
-        ? `<button type="button" onclick="claimTicket('${ticket.id}')">استلام</button>`
+      <b>${esc(t.ticket_type === "complaint" ? "شكوى" : "دعم فني")}</b>
+      — ${ticketStatus(t.status)}
+      <p>${esc(t.body)}</p>
+      <button onclick="openTicket('${t.id}')">فتح</button>
+      ${t.status === "open"
+        ? `<button onclick="claimTicket('${t.id}')">استلام</button>`
         : ""}
-      ${ticket.status !== "closed"
-        ? `<button class="secondary" type="button" onclick="closeTicket('${ticket.id}')">إغلاق</button>`
+      ${t.status !== "closed"
+        ? `<button class="secondary" onclick="closeTicket('${t.id}')">إغلاق</button>`
         : ""}
     </div>
   `).join("") || "<p>لا توجد تذاكر.</p>";
-};
+}
 
-/* =========================
-   التنقل وتسجيل الدخول
-========================= */
+/* إنشاء الفعاليات والرحلات */
 
-document.querySelectorAll("[data-page]").forEach(button => {
-  button.addEventListener("click", () => {
-    if (button.dataset.page === "admin" && !isStaff) return;
+$("eventForm").addEventListener("submit", async e => {
+  e.preventDefault();
 
-    document.querySelectorAll(".page").forEach(page => {
-      page.classList.add("hidden");
-    });
+  if (!isStaff) return;
 
-    $(button.dataset.page).classList.remove("hidden");
+  const { error } = await client.from("events").insert({
+    title: $("eventTitle").value.trim(),
+    description: $("eventDescription").value.trim(),
+    starts_at: new Date($("eventDate").value).toISOString(),
+    capacity: Number($("eventCapacity").value) || 0,
+    created_by: currentUser.id
+  });
 
-    document.querySelectorAll("[data-page]").forEach(navButton => {
-      navButton.classList.toggle("active", navButton === button);
-    });
+  if (error) return alert(error.message);
+
+  e.target.reset();
+  await loadEvents();
+  alert("تم نشر الفعالية");
+});
+
+$("tripForm").addEventListener("submit", async e => {
+  e.preventDefault();
+
+  if (!canManageTrips) {
+    return alert("لا تملك صلاحية إدارة الرحلات.");
+  }
+
+  const { error } = await client.from("trips").insert({
+    title: $("tripTitle").value.trim(),
+    description: $("tripDescription").value.trim(),
+    departure_at: new Date($("tripDate").value).toISOString(),
+    capacity: Number($("tripCapacity").value) || 0,
+    created_by: currentUser.id
+  });
+
+  if (error) return alert(error.message);
+
+  e.target.reset();
+  await loadTrips();
+  alert("تم نشر إعلان الرحلة");
+});
+
+/* التنقل */
+
+document.querySelectorAll("[data-page]").forEach(b => {
+  b.addEventListener("click", () => {
+    if (b.dataset.page === "admin" && !isStaff) return;
+
+    document.querySelectorAll(".page").forEach(p =>
+      p.classList.add("hidden")
+    );
+
+    $(b.dataset.page).classList.remove("hidden");
+
+    document.querySelectorAll("[data-page]").forEach(x =>
+      x.classList.toggle("active", x === b)
+    );
   });
 });
+
+/* تسجيل الدخول والخروج */
 
 $("login").onclick = signIn;
 
@@ -870,20 +760,20 @@ $("logout").onclick = async () => {
 
 async function init() {
   try {
-    const { data, error } = await client.auth.getSession();
+    const { data: { session }, error } = await client.auth.getSession();
 
     if (error) throw error;
 
-    if (data.session?.user) {
-      currentUser = data.session.user;
+    if (session?.user) {
+      currentUser = session.user;
       await checkRole();
     } else {
       showApp(false);
       status("سجّل دخولك بحساب Discord للمتابعة.");
     }
-  } catch (error) {
-    console.error(error);
-    status("خطأ: " + error.message);
+  } catch (e) {
+    console.error(e);
+    status("خطأ: " + e.message);
   }
 }
 
@@ -896,6 +786,7 @@ client.auth.onAuthStateChange((event, session) => {
   if (event === "SIGNED_OUT") {
     currentUser = null;
     isStaff = false;
+    canManageTrips = false;
     showApp(false);
     status("تم تسجيل الخروج.");
   }
